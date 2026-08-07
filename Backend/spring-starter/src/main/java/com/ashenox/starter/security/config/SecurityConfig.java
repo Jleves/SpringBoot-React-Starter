@@ -4,9 +4,8 @@ package com.ashenox.starter.security.config;
 
 
 import com.ashenox.starter.security.jwt.JwtRequestFilter;
-import com.ashenox.starter.user.service.impl.UserServiceImpl;
+import com.ashenox.starter.security.service.DatabaseUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,7 +22,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -32,13 +30,9 @@ import java.util.List;
 public class SecurityConfig  {
 
 
-    private final UserServiceImpl userService;
+    private final DatabaseUserDetailsService userDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-
-    @Value("${app.security.allowed-origins:http://localhost:5173,http://localhost:3000}")
-    private String allowedOrigins;
 
     //Dao Authenticador provider
 
@@ -46,7 +40,7 @@ public class SecurityConfig  {
     public DaoAuthenticationProvider daoAuthenticationProvider() {
 
         DaoAuthenticationProvider provider =
-                new DaoAuthenticationProvider(userService);
+                new DaoAuthenticationProvider(userDetailsService);
 
         provider.setPasswordEncoder(bCryptPasswordEncoder);
 
@@ -59,12 +53,7 @@ public class SecurityConfig  {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        List<String> origins = Arrays.stream(allowedOrigins.split(","))
-                .map(String::trim)
-                .filter(origin -> !origin.isBlank())
-                .toList();
-
-        configuration.setAllowedOrigins(origins);
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
@@ -107,7 +96,7 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.GET,"/api/public/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/public/**").permitAll()
                         .requestMatchers("/api/admin/**")
-                        .hasAnyRole("ADMIN","SUPERADMINISTRADOR")
+                        .hasAnyRole("ADMIN", "SUPER_ADMIN")
 
 
                         .anyRequest().authenticated()

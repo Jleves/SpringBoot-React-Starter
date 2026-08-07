@@ -3,6 +3,7 @@ package com.ashenox.starter.email.service.Impl;
 
 
 import com.ashenox.starter.email.service.Interface.EmailService;
+import com.ashenox.starter.shared.config.AppProperties;
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
 import jakarta.activation.FileDataSource;
@@ -13,7 +14,6 @@ import jakarta.mail.internet.MimeMultipart;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -39,31 +39,18 @@ public class EmailServiceImple implements EmailService {
     public static final String RESTABLECER_CONTRASEÑA = "Restablecer contraseña";
 
     private static final Logger log = LoggerFactory.getLogger(EmailServiceImple.class);
-    @Value("${app.mail.admin}")
-    private String adminEmail;
-    @Value("${app.frontend-url}")
-    private String appFrontendUrl;
-
-
     private final JavaMailSender emailSender;
     private final TemplateEngine templateEngine;
-
-
-
-
-    @Value("${spring.mail.verify.host}")
-    private String host;
-    @Value("${spring.mail.username}")
-    private String fromEmail;
+    private final AppProperties appProperties;
     @Override
     @Async   //Enviar Mensaje Simple
     public void sendSimpleMailMessage(String name, String to, String token) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setSubject(NEW_USER_ACCOUNT_VERIFICATION);
-            message.setFrom(fromEmail);
+            message.setFrom(fromEmail());
             message.setTo(to);
-            message.setText(getEmailMessage(name, host, token));
+            message.setText(getEmailMessage(name, verificationBaseUrl(), token));
             emailSender.send(message);
         } catch (Exception exception) {
             throw new RuntimeException(exception.getMessage());
@@ -78,9 +65,9 @@ public class EmailServiceImple implements EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
             helper.setPriority(1);
             helper.setSubject(NEW_USER_ACCOUNT_VERIFICATION);
-            helper.setFrom(fromEmail);
+            helper.setFrom(fromEmail());
             helper.setTo(to);
-            helper.setText(getEmailMessage(name, host, token));
+            helper.setText(getEmailMessage(name, verificationBaseUrl(), token));
             //Add attachments
             FileSystemResource fort = new FileSystemResource(new File(System.getProperty("user.home") + "/Downloads/images/fort.jpg"));
             FileSystemResource dog = new FileSystemResource(new File(System.getProperty("user.home") + "/Downloads/images/dog.jpg"));
@@ -104,9 +91,9 @@ public class EmailServiceImple implements EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
             helper.setPriority(1);
             helper.setSubject(NEW_USER_ACCOUNT_VERIFICATION);
-            helper.setFrom(fromEmail);
+            helper.setFrom(fromEmail());
             helper.setTo(to);
-            helper.setText(getEmailMessage(name, host, token));
+            helper.setText(getEmailMessage(name, verificationBaseUrl(), token));
             //Add attachments  agregamos archivos tanto imagenes como documentos
             FileSystemResource fort = new FileSystemResource(new File(System.getProperty("user.home") + "/Downloads/images/fort.jpg"));
             FileSystemResource dog = new FileSystemResource(new File(System.getProperty("user.home") + "/Downloads/images/dog.jpg"));
@@ -127,14 +114,14 @@ public class EmailServiceImple implements EmailService {
         try {
             Context context = new Context();
             context.setVariable("name", name);
-            context.setVariable("url", getVerificationUrl(host, token));
-            context.setVariables(Map.of("name", name, "url", getVerificationUrl(host, token)));
+            context.setVariable("url", getVerificationUrl(verificationBaseUrl(), token));
+            context.setVariables(Map.of("name", name, "url", getVerificationUrl(verificationBaseUrl(), token)));
             String text = templateEngine.process(EMAIL_TEMPLATE, context);
             MimeMessage message = getMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
             helper.setPriority(1);
             helper.setSubject(NEW_USER_ACCOUNT_VERIFICATION);
-            helper.setFrom(fromEmail);
+            helper.setFrom(fromEmail());
             helper.setTo(to);
             helper.setText(text, true);
             //Add attachments (Optional)
@@ -159,11 +146,11 @@ public class EmailServiceImple implements EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
             helper.setPriority(1);
             helper.setSubject(NEW_USER_ACCOUNT_VERIFICATION);
-            helper.setFrom(fromEmail);
+            helper.setFrom(fromEmail());
             helper.setTo(to);
             //helper.setText("", true);
             Context context = new Context();
-            context.setVariables(Map.of("name", name, "url", getVerificationUrl(host, token)));
+            context.setVariables(Map.of("name", name, "url", getVerificationUrl(verificationBaseUrl(), token)));
             String text = templateEngine.process(EMAIL_TEMPLATE, context);
 
             // Add HTML email body
@@ -191,13 +178,13 @@ public class EmailServiceImple implements EmailService {
     public void sendPasswordResetEmail(String name, String to, String token) {
         try {
             Context context = new Context();
-            context.setVariables(Map.of("name", name, "url",  getPasswordResetUrl(host, token)));
+            context.setVariables(Map.of("name", name, "url", getPasswordResetUrl(frontendBaseUrl(), token)));
             String html = templateEngine.process("password-reset-template", context); // Nuevo template
             MimeMessage message = getMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
             helper.setPriority(1);
             helper.setSubject(RESTABLECER_CONTRASEÑA);
-            helper.setFrom(fromEmail);
+            helper.setFrom(fromEmail());
             helper.setTo(to);
             helper.setText(html, true);
             emailSender.send(message);
@@ -209,6 +196,18 @@ public class EmailServiceImple implements EmailService {
 
     private MimeMessage getMimeMessage() {
         return emailSender.createMimeMessage();
+    }
+
+    private String fromEmail() {
+        return appProperties.getMail().getUsername();
+    }
+
+    private String verificationBaseUrl() {
+        return appProperties.getMail().getVerificationBaseUrl().toString();
+    }
+
+    private String frontendBaseUrl() {
+        return appProperties.getMail().getFrontendBaseUrl().toString();
     }
 
     private String getContentId(String filename) {

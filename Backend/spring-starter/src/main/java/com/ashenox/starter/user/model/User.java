@@ -1,58 +1,54 @@
 package com.ashenox.starter.user.model;
 
-
 import com.ashenox.starter.shared.persistence.EntidadAuditable;
-import com.ashenox.starter.user.Enum.Permissions;
-import com.ashenox.starter.user.Enum.Role;
-import jakarta.persistence.*;
-
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import com.ashenox.starter.user.support.EmailNormalizer;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class User extends EntidadAuditable implements UserDetails {
+@SuperBuilder
+public class User extends EntidadAuditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true, length = 320)
     private String email;
-    //private String username; //fijarse donde tenemos problemas
 
-    @Column(nullable = false)
-    private String password;
+    @Column(name = "password_hash", nullable = false, length = 60)
+    private String passwordHash;
 
     @Enumerated(EnumType.STRING)
-    private Role rol;
+    @Column(nullable = false, length = 32)
+    private Role role;
 
-    public String getUsername() { return email; }
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean enabled = true;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-
-        // Rol
-        authorities.add(new SimpleGrantedAuthority(getRol().getAuthority()));
-
-        // Permisos
-        for (Permissions permiso : getRol().getPermisos()) {
-            authorities.add(new SimpleGrantedAuthority(permiso.getAuthority()));
-        }
-
-        return authorities;
+    @PrePersist
+    @PreUpdate
+    void normalizeEmail() {
+        email = EmailNormalizer.normalize(email);
     }
-
 }

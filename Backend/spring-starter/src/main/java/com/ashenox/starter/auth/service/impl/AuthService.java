@@ -1,98 +1,51 @@
 package com.ashenox.starter.auth.service.impl;
 
-
-
 import com.ashenox.starter.Exception.JWT.InvalidCredentialsException;
 import com.ashenox.starter.auth.model.AuthResponse;
 import com.ashenox.starter.auth.model.LoginRequest;
-import com.ashenox.starter.security.config.PasswordEncoder;
+import com.ashenox.starter.auth.session.service.AuthSessionService;
+import com.ashenox.starter.auth.session.service.IssuedSession;
 import com.ashenox.starter.security.jwt.JWTUtil;
 import com.ashenox.starter.shared.config.AppProperties;
 import com.ashenox.starter.user.dto.UserDTO;
 import com.ashenox.starter.user.model.User;
-import com.ashenox.starter.user.service.Interface.UserService;
+import com.ashenox.starter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-@Slf4j
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final JWTUtil jwtUtil;  //Para generar el token
-    private final PasswordEncoder passwordEncoder; //Encriptar el TOKEN
-    private final UserService userService; //Para buscar el usuario
 
-    private RefreshTokenService refreshTokenService;
-    private AppProperties appProperties;
-
-
-@Autowired
-    public AuthService( JWTUtil jwtUtil, PasswordEncoder passwordEncoder, UserService userService, RefreshTokenService refreshTokenService, AppProperties appProperties, AuthenticationManager authenticationManager) {
-        this.jwtUtil = jwtUtil;
-        this.passwordEncoder = passwordEncoder;
-    this.userService = userService;
-    this.refreshTokenService = refreshTokenService;
-        this.appProperties = appProperties;
-        this.authenticationManager = authenticationManager;
-    }
-
-    @Autowired
-    private final AuthenticationManager authenticationManager; // Para que se autentique
-
+    private final JWTUtil jwtUtil;
+    private final UserService userService;
+    private final AuthSessionService authSessionService;
+    private final AppProperties appProperties;
+    private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest loginRequest) {
-
         try {
-
-
-
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
-            log.info("Usuario autenticado con exito");
-
-            // ya autenticado por Spring Security.
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-
-
-            User user = userService.findByEmail(loginRequest.getEmail())
-                    .orElseThrow();
-
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(user.getId());
-            userDTO.setUsername(user.getUsername());
-            userDTO.setRol(user.getRol().getAuthority());
-
-
-            String token = jwtUtil.generateToken(userDetails);
-
-
-            String refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername(), user.getId()).getToken();
-
-            log.info("Creacion de token y refresh token ok");
-
-            Long expiration= appProperties.getSecurity().getJwt().getAccessExpirationMinutes()*60;
-
-
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+            );
+            UserDetails principal = (UserDetails) authentication.getPrincipal();
+            User user = userService.findByEmail(principal.getUsername()).orElseThrow();
+            IssuedSession issuedSession = authSessionService.createSession(user);
 
             return AuthResponse.builder()
-                    .accessToken(token)
-                    .refreshToken(refreshToken)
+                    .accessToken(jwtUtil.generateToken(principal))
+                    .refreshToken(issuedSession.refreshToken())
                     .tokenType("Bearer")
-                    .expiresIn(expiration)
-                    .user(userDTO)
+                    .expiresIn(appProperties.getSecurity().getJwt().getAccessExpiration().toSeconds())
+                    .user(UserDTO.fromUser(user))
                     .build();
-
-
-        }catch (AuthenticationException ex) {
+        } catch (AuthenticationException exception) {
             throw new InvalidCredentialsException("Usuario o contraseña incorrectos");
         }
-
     }
-
 }

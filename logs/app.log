@@ -1,0 +1,15 @@
+[2026-08-07 10:24:58] [INFO ] [c.a.starter.SpringStarterApplication] [] Starting SpringStarterApplication using Java 21.0.7 with PID 25016 (C:\Users\jlinf\OneDrive\Desktop\Programacion\Trabajo\InitStarted\spring-starter\Backend\spring-starter\target\classes started by jlinf in C:\Users\jlinf\OneDrive\Desktop\Programacion\Trabajo\InitStarted\spring-starter)
+[2026-08-07 10:24:58] [INFO ] [c.a.starter.SpringStarterApplication] [] No active profile set, falling back to 1 default profile: "default"
+[2026-08-07 10:25:00] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Initializing ProtocolHandler ["http-nio-8080"]
+[2026-08-07 10:25:00] [INFO ] [o.a.catalina.core.StandardService] [] Starting service [Tomcat]
+[2026-08-07 10:25:00] [INFO ] [o.a.catalina.core.StandardEngine] [] Starting Servlet engine: [Apache Tomcat/11.0.22]
+[2026-08-07 10:25:01] [INFO ] [org.flywaydb.core.FlywayExecutor] [] Database: jdbc:mysql://127.0.0.1:3306/springStarter (MySQL 8.4)
+[2026-08-07 10:25:01] [INFO ] [o.f.core.internal.command.DbValidate] [] Successfully validated 1 migration (execution time 00:00.038s)
+[2026-08-07 10:25:01] [INFO ] [o.f.core.internal.command.DbMigrate] [] Current version of schema `springstarter`: << Empty Schema >>
+[2026-08-07 10:25:01] [INFO ] [o.f.core.internal.command.DbMigrate] [] Migrating schema `springstarter` to version "1 - create auth foundation"
+[2026-08-07 10:25:02] [INFO ] [o.f.core.internal.command.DbMigrate] [] Successfully applied 1 migration to schema `springstarter`, now at version v1 (execution time 00:00.191s)
+[2026-08-07 10:25:02] [WARN ] [org.hibernate.orm.deprecation] [] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+[2026-08-07 10:25:04] [WARN ] [o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer] [] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+[2026-08-07 10:25:04] [WARN ] [o.s.b.t.a.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration] [] Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+[2026-08-07 10:25:05] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Starting ProtocolHandler ["http-nio-8080"]
+[2026-08-07 10:25:05] [INFO ] [c.a.starter.SpringStarterApplication] [] Started SpringStarterApplication in 7.673 seconds (process running for 8.02)

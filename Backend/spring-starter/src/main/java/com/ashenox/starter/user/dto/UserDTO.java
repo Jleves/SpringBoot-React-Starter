@@ -1,7 +1,5 @@
 package com.ashenox.starter.user.dto;
 
-
-
 import com.ashenox.starter.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,10 +17,11 @@ public class UserDTO {
     private String rol;
 
     public static UserDTO fromUser(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setRol(user.getRol().toString());
-        return userDTO;
+        return UserDTO.builder()
+                .id(user.getId())
+                .username(user.getEmail())
+                .email(user.getEmail())
+                .rol(user.getRole().name())
+                .build();
     }
 }

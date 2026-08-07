@@ -67,7 +67,7 @@ public class JWTUtil {
 
     // Podés agregar claims personalizados (roles, permisos, etc.)
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        long expiracionTime= appProperties.getSecurity().getJwt().getAccessExpirationMinutes() * 60000;
+        long expiracionTime = appProperties.getSecurity().getJwt().getAccessExpiration().toMillis();
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())

@@ -1,28 +1,28 @@
 package com.ashenox.starter.auth.service.impl;
 
-
-
-
-
 import com.ashenox.starter.Exception.JWT.InvalidTokenException;
-import com.ashenox.starter.auth.model.PasswordResetToken;
+import com.ashenox.starter.auth.passwordreset.model.PasswordResetToken;
 import com.ashenox.starter.auth.passwordreset.repository.PasswordResetTokenRepository;
 import com.ashenox.starter.auth.service.PasswordResetService;
 import com.ashenox.starter.email.service.Interface.EmailService;
-import com.ashenox.starter.security.config.PasswordEncoder;
 import com.ashenox.starter.user.repository.UserRepository;
+import com.ashenox.starter.user.support.EmailNormalizer;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Base64;
-@Slf4j
+
 @Service
 @RequiredArgsConstructor
 public class PasswordResetServiceImpl implements PasswordResetService {
+
+    private static final Duration RESET_TOKEN_TTL = Duration.ofMinutes(30);
 
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository tokenRepository;
@@ -31,78 +31,51 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     private final SecureRandom secureRandom = new SecureRandom();
 
     @Override
+    @Transactional
     public void createPasswordResetToken(String email) {
-        var user = userRepository.findByEmailIgnoreCase(email);
-
-        if (user == null) {
-            log.info("[INFO] Solicitud de recuperacion para email no registrado: {}", email);
-            return;
-        }
-
-        log.debug("[SUCCESS] Usuario encontrado: {}", user.getEmail());
-
-        String tokenPlano = generarTokenPlano();
-        String tokenHash = hashToken(tokenPlano);
-
-        PasswordResetToken resetToken = tokenRepository.findByUser(user)
-                .map(existingToken -> {
-                    existingToken.setToken(tokenHash);
-                    existingToken.setExpiration(LocalDateTime.now().plusMinutes(50));
-                    existingToken.setUsed(false);
-                    return existingToken;
-                })
-                .orElseGet(() -> new PasswordResetToken(
-                        null,
-                        tokenHash,
-                        user,
-                        LocalDateTime.now().plusMinutes(30),
-                        false
-                ));
-
-        tokenRepository.save(resetToken);
-
-        log.info("[SUCCESS] Token de recuperación guardado/actualizado para usuario: {}", user.getEmail());
-
-        emailService.sendPasswordResetEmail(user.getEmail(), user.getEmail(), tokenPlano);
+        userRepository.findByEmail(EmailNormalizer.normalize(email)).ifPresent(user -> {
+            String plainToken = generatePlainToken();
+            PasswordResetToken resetToken = tokenRepository.findByUser(user)
+                    .orElseGet(PasswordResetToken::new);
+            resetToken.setUser(user);
+            resetToken.setTokenHash(hashToken(plainToken));
+            resetToken.setExpiresAt(Instant.now().plus(RESET_TOKEN_TTL));
+            resetToken.setUsedAt(null);
+            tokenRepository.save(resetToken);
+            emailService.sendPasswordResetEmail(user.getEmail(), user.getEmail(), plainToken);
+        });
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean validateToken(String token) {
-        String tokenHash = hashToken(token);
-
-
-        var resetToken = tokenRepository.findByToken(tokenHash)
-                .filter(t -> !t.isUsed() && t.getExpiration().isAfter(LocalDateTime.now()))
-                .orElseThrow(() -> new InvalidTokenException("Token inválido o expirado"));
-        log.info("[SUCCESS] token valido");
-
+        findUsableToken(token);
         return true;
     }
 
     @Override
+    @Transactional
     public void resetPassword(String token, String newPassword) {
-        String tokenHash = hashToken(token);
-
-        var resetToken = tokenRepository.findByToken(tokenHash)
-                .filter(t -> !t.isUsed() && t.getExpiration().isAfter(LocalDateTime.now()))
-                .orElseThrow(() -> new InvalidTokenException("Token inválido o expirado"));
-
-        var user = resetToken.getUser();
-        user.setPassword(passwordEncoder.bCryptPasswordEncoder().encode(newPassword));
-        userRepository.save(user);
-
-        resetToken.setUsed(true);
+        PasswordResetToken resetToken = findUsableToken(token);
+        resetToken.getUser().setPasswordHash(passwordEncoder.encode(newPassword));
+        resetToken.setUsedAt(Instant.now());
         tokenRepository.save(resetToken);
-        log.info("[SUCCESS] Usuario restableció su contraseña exitosamente :  {}", user.getEmail());
     }
 
-    private String generarTokenPlano() {
+    private PasswordResetToken findUsableToken(String plainToken) {
+        Instant now = Instant.now();
+        return tokenRepository.findByTokenHash(hashToken(plainToken))
+                .filter(token -> token.getUsedAt() == null && token.getExpiresAt().isAfter(now))
+                .orElseThrow(() -> new InvalidTokenException("Token inválido o expirado"));
+    }
+
+    private String generatePlainToken() {
         byte[] bytes = new byte[32];
         secureRandom.nextBytes(bytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
-    private String hashToken(String tokenPlano) {
-        return DigestUtils.sha256Hex(tokenPlano);
+    private String hashToken(String plainToken) {
+        return DigestUtils.sha256Hex(plainToken);
     }
 }
