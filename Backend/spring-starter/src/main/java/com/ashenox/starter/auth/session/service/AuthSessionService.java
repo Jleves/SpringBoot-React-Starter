@@ -3,10 +3,14 @@ package com.ashenox.starter.auth.session.service;
 import com.ashenox.starter.auth.session.model.AuthSession;
 import com.ashenox.starter.auth.session.repository.AuthSessionRepository;
 import com.ashenox.starter.shared.config.AppProperties;
+import com.ashenox.starter.security.error.InvalidRefreshTokenException;
 import com.ashenox.starter.user.model.User;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -22,9 +26,11 @@ import java.util.UUID;
 public class AuthSessionService {
 
     private static final int SECRET_BYTES = 32;
+    private static final Logger SECURITY_LOG = LoggerFactory.getLogger("SECURITY");
 
     private final AuthSessionRepository sessionRepository;
     private final AppProperties appProperties;
+    private final SessionRevocationService revocationService;
     private final SecureRandom secureRandom = new SecureRandom();
 
     @Transactional
@@ -46,18 +52,49 @@ public class AuthSessionService {
     public IssuedSession rotate(String refreshToken) {
         TokenParts parts = parse(refreshToken);
         AuthSession session = sessionRepository.findWithUserById(parts.sessionId())
-                .orElseThrow(() -> new IllegalArgumentException("Refresh token inválido"));
+                .orElseThrow(this::invalidRefreshToken);
 
         Instant now = Instant.now();
-        if (!session.isActiveAt(now) || !matches(parts.secret(), session.getRefreshTokenHash())) {
-            throw new IllegalArgumentException("Refresh token inválido o expirado");
+        if (!session.isActiveAt(now)) {
+            throw invalidRefreshToken();
+        }
+        if (!matches(parts.secret(), session.getRefreshTokenHash())) {
+            SECURITY_LOG.warn("event=refresh_reuse_detected userId={} sessionId={}",
+                    session.getUser().getId(), session.getId());
+            revocationService.revokeInNewTransaction(session.getId());
+            throw invalidRefreshToken();
         }
 
         String newSecret = generateSecret();
         session.setRefreshTokenHash(hash(newSecret));
         session.setLastUsedAt(now);
         session.setExpiresAt(now.plus(appProperties.getSecurity().getJwt().getRefreshExpiration()));
-        return new IssuedSession(sessionRepository.save(session), encode(session.getId(), newSecret));
+        try {
+            return new IssuedSession(sessionRepository.saveAndFlush(session), encode(session.getId(), newSecret));
+        } catch (OptimisticLockingFailureException exception) {
+            SECURITY_LOG.warn("event=refresh_concurrency_rejected userId={} sessionId={}",
+                    session.getUser().getId(), session.getId());
+            revocationService.revokeInNewTransaction(session.getId());
+            throw invalidRefreshToken();
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public void revoke(String refreshToken) {
+        TokenParts parts;
+        try {
+            parts = parse(refreshToken);
+        } catch (InvalidRefreshTokenException exception) {
+            return;
+        }
+        sessionRepository.findWithUserById(parts.sessionId())
+                .filter(session -> matches(parts.secret(), session.getRefreshTokenHash()))
+                .ifPresent(session -> revocationService.revokeInNewTransaction(session.getId()));
+    }
+
+    @Transactional
+    public int revokeAllForUser(Long userId) {
+        return sessionRepository.revokeAllByUserId(userId, Instant.now());
     }
 
     private String generateSecret() {
@@ -71,14 +108,18 @@ public class AuthSessionService {
     }
 
     private TokenParts parse(String token) {
-        if (token == null) {
-            throw new IllegalArgumentException("Refresh token inválido");
+        if (token == null || token.isBlank()) {
+            throw invalidRefreshToken();
         }
         int separator = token.indexOf('.');
         if (separator <= 0 || separator == token.length() - 1) {
-            throw new IllegalArgumentException("Refresh token inválido");
+            throw invalidRefreshToken();
         }
         return new TokenParts(token.substring(0, separator), token.substring(separator + 1));
+    }
+
+    private InvalidRefreshTokenException invalidRefreshToken() {
+        return new InvalidRefreshTokenException("Refresh token inválido o expirado");
     }
 
     private boolean matches(String secret, String expectedHash) {

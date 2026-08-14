@@ -1,12 +1,15 @@
 package com.ashenox.starter.security.jwt;
 
+import com.ashenox.starter.auth.cookie.AuthCookieService;
 import com.ashenox.starter.security.service.DatabaseUserDetailsService;
+import com.ashenox.starter.shared.config.AppProperties;
 import com.ashenox.starter.shared.error.ApiErrorResponder;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import jakarta.servlet.http.Cookie;
 import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,13 +21,14 @@ class JwtRequestFilterTest {
 
     private final DatabaseUserDetailsService userDetailsService = mock(DatabaseUserDetailsService.class);
     private final JWTUtil jwtUtil = mock(JWTUtil.class);
+    private final AuthCookieService cookieService = new AuthCookieService(properties());
     private final JwtRequestFilter filter = new JwtRequestFilter(
-            userDetailsService, jwtUtil, new ApiErrorResponder(new ObjectMapper()));
+            userDetailsService, jwtUtil, new ApiErrorResponder(new ObjectMapper()), cookieService);
 
     @Test
-    void returnsSharedContractForExpiredBearerToken() throws Exception {
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/auth/profile");
-        request.addHeader("Authorization", "Bearer expired-token");
+    void returnsSharedContractForExpiredAccessCookie() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/auth/me");
+        request.setCookies(new Cookie(AuthCookieService.ACCESS_TOKEN, "expired-token"));
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain chain = new MockFilterChain();
         when(jwtUtil.extractUserName("expired-token")).thenThrow(mock(ExpiredJwtException.class));
@@ -38,9 +42,9 @@ class JwtRequestFilterTest {
     }
 
     @Test
-    void returnsSharedContractForInvalidBearerToken() throws Exception {
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/auth/profile");
-        request.addHeader("Authorization", "Bearer invalid-token");
+    void returnsSharedContractForInvalidAccessCookie() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/auth/me");
+        request.setCookies(new Cookie(AuthCookieService.ACCESS_TOKEN, "invalid-token"));
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain chain = new MockFilterChain();
         when(jwtUtil.extractUserName("invalid-token")).thenThrow(new IllegalArgumentException("token details"));
@@ -53,5 +57,24 @@ class JwtRequestFilterTest {
                 .doesNotContain("token details");
         verifyNoInteractions(userDetailsService);
         assertThat(chain.getRequest()).isNull();
+    }
+
+    @Test
+    void ignoresBearerAuthentication() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/auth/me");
+        request.addHeader("Authorization", "Bearer ignored-token");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        MockFilterChain chain = new MockFilterChain();
+
+        filter.doFilter(request, response, chain);
+
+        assertThat(chain.getRequest()).isNotNull();
+        verifyNoInteractions(jwtUtil, userDetailsService);
+    }
+
+    private static AppProperties properties() {
+        AppProperties properties = new AppProperties();
+        properties.getSecurity().getCookies().setSecure(false);
+        return properties;
     }
 }

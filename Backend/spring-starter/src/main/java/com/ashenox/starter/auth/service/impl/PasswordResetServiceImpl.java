@@ -3,6 +3,7 @@ package com.ashenox.starter.auth.service.impl;
 import com.ashenox.starter.security.error.InvalidTokenException;
 import com.ashenox.starter.auth.passwordreset.model.PasswordResetToken;
 import com.ashenox.starter.auth.passwordreset.repository.PasswordResetTokenRepository;
+import com.ashenox.starter.auth.session.service.AuthSessionService;
 import com.ashenox.starter.auth.service.PasswordResetService;
 import com.ashenox.starter.email.service.EmailService;
 import com.ashenox.starter.user.repository.UserRepository;
@@ -28,6 +29,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     private final PasswordResetTokenRepository tokenRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthSessionService authSessionService;
     private final SecureRandom secureRandom = new SecureRandom();
 
     @Override
@@ -60,6 +62,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         resetToken.getUser().setPasswordHash(passwordEncoder.encode(newPassword));
         resetToken.setUsedAt(Instant.now());
         tokenRepository.save(resetToken);
+        authSessionService.revokeAllForUser(resetToken.getUser().getId());
     }
 
     private PasswordResetToken findUsableToken(String plainToken) {

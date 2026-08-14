@@ -4,6 +4,7 @@ import com.ashenox.starter.auth.model.LoginRequest;
 import com.ashenox.starter.log.filter.RequestLoggingFilter;
 import com.ashenox.starter.security.error.InvalidCredentialsException;
 import com.ashenox.starter.security.error.InvalidTokenException;
+import com.ashenox.starter.security.error.InvalidRefreshTokenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -63,6 +64,13 @@ class GlobalExceptionHandlerTest {
     void returnsInvalidResetToken() {
         assertError(handler.handleInvalidResetToken(new InvalidTokenException("sensitive"), request),
                 HttpStatus.BAD_REQUEST, ApiErrorCode.AUTH_RESET_TOKEN_INVALID);
+    }
+
+    @Test
+    void returnsInvalidRefreshToken() {
+        assertError(handler.handleInvalidRefreshToken(
+                        new InvalidRefreshTokenException("sensitive"), request),
+                HttpStatus.UNAUTHORIZED, ApiErrorCode.AUTH_REFRESH_TOKEN_INVALID);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.ashenox.starter.security.jwt;
 
+import com.ashenox.starter.auth.cookie.AuthCookieService;
 import com.ashenox.starter.security.service.DatabaseUserDetailsService;
 import com.ashenox.starter.security.model.AuthenticatedUser;
 import com.ashenox.starter.log.filter.RequestLoggingFilter;
@@ -14,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,17 +34,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final DatabaseUserDetailsService userDetailsService;
     private final JWTUtil jwtUtil;
     private final ApiErrorResponder errorResponder;
+    private final AuthCookieService cookieService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+        String jwt = cookieService.readAccessToken(request).orElse(null);
+        if (jwt == null) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        String jwt = authorizationHeader.substring(7);
         try {
             authenticate(jwt, request);
         } catch (ExpiredJwtException exception) {
@@ -65,7 +64,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if (!jwtUtil.isTokenValid(jwt, userDetails)) {
+        if (!userDetails.isEnabled() || !jwtUtil.isTokenValid(jwt, userDetails)) {
             throw new IllegalArgumentException("JWT subject does not match authenticated user");
         }
 
@@ -76,6 +75,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (userDetails instanceof AuthenticatedUser user) {
             request.setAttribute(RequestLoggingFilter.USER_ID_ATTRIBUTE, user.id());
         }
+        String sessionId = jwtUtil.extractSessionId(jwt);
+        if (sessionId != null) {
+            request.setAttribute(RequestLoggingFilter.SESSION_ID_ATTRIBUTE, sessionId);
+        }
     }
 
     private void reject(HttpServletRequest request, HttpServletResponse response,
@@ -84,5 +87,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         SECURITY_LOG.warn("event=authentication_rejected code={} method={} path={}",
                 code, request.getMethod(), request.getRequestURI());
         errorResponder.write(request, response, HttpServletResponse.SC_UNAUTHORIZED, code, message);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.equals("/api/auth/csrf")
+                || path.equals("/api/auth/login")
+                || path.equals("/api/auth/refresh")
+                || path.equals("/api/auth/logout")
+                || path.equals("/api/auth/forgot-password")
+                || path.startsWith("/api/auth/reset-password");
     }
 }

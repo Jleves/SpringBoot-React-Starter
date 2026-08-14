@@ -2,6 +2,7 @@ package com.ashenox.starter.shared.error;
 
 import com.ashenox.starter.security.error.InvalidCredentialsException;
 import com.ashenox.starter.security.error.InvalidTokenException;
+import com.ashenox.starter.security.error.InvalidRefreshTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -80,6 +81,13 @@ public class GlobalExceptionHandler {
                                                              HttpServletRequest request) {
         return response(request, HttpStatus.BAD_REQUEST, ApiErrorCode.AUTH_RESET_TOKEN_INVALID,
                 "El token de recuperación es inválido o expiró.");
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<ApiError> handleInvalidRefreshToken(InvalidRefreshTokenException exception,
+                                                               HttpServletRequest request) {
+        return response(request, HttpStatus.UNAUTHORIZED, ApiErrorCode.AUTH_REFRESH_TOKEN_INVALID,
+                "El refresh token es inválido o expiró.");
     }
 
     @ExceptionHandler(AccessDeniedException.class)

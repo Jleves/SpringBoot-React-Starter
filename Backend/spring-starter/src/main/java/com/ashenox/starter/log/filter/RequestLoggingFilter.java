@@ -16,6 +16,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
     public static final String REQUEST_ID_ATTRIBUTE = RequestLoggingFilter.class.getName() + ".requestId";
     public static final String USER_ID_ATTRIBUTE = RequestLoggingFilter.class.getName() + ".userId";
+    public static final String SESSION_ID_ATTRIBUTE = RequestLoggingFilter.class.getName() + ".sessionId";
     public static final String REQUEST_ID_HEADER = "X-Request-Id";
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestLoggingFilter.class);
 
@@ -42,8 +43,11 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         } finally {
             long duration = System.currentTimeMillis() - startTime;
             Object userId = request.getAttribute(USER_ID_ATTRIBUTE);
-            LOGGER.info("request_completed method={} path={} status={} durationMs={} userId={}",
-                    method, path, response.getStatus(), duration, userId == null ? "anonymous" : userId);
+            Object sessionId = request.getAttribute(SESSION_ID_ATTRIBUTE);
+            LOGGER.info("request_completed method={} path={} status={} durationMs={} userId={} sessionId={}",
+                    method, path, response.getStatus(), duration,
+                    userId == null ? "anonymous" : userId,
+                    sessionId == null ? "none" : sessionId);
             MDC.remove("requestId");
         }
     }

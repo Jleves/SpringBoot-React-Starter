@@ -38,6 +38,15 @@ public class AppProperties {
     public static class Security {
         @Valid
         private Jwt jwt = new Jwt();
+
+        @Valid
+        private Cookies cookies = new Cookies();
+    }
+
+    @Getter
+    @Setter
+    public static class Cookies {
+        private boolean secure = true;
     }
 
     @Getter

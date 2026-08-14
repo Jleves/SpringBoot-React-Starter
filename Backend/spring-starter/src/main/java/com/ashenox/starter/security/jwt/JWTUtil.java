@@ -56,13 +56,18 @@ public class JWTUtil {
     }
 
     // Genera el token a partir del UserDetails
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, String sessionId) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("sid", sessionId);
         return generateToken(claims, userDetails);
     }
 
+    public String extractSessionId(String token) {
+        return extractClaim(token, claims -> claims.get("sid", String.class));
+    }
+
     // Podés agregar claims personalizados (roles, permisos, etc.)
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         long expiracionTime = appProperties.getSecurity().getJwt().getAccessExpiration().toMillis();
         return Jwts.builder()
                 .setClaims(extraClaims)

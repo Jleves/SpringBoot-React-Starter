@@ -7,6 +7,7 @@ import com.ashenox.starter.security.jwt.JwtRequestFilter;
 import com.ashenox.starter.security.error.ApiAccessDeniedHandler;
 import com.ashenox.starter.security.error.ApiAuthenticationEntryPoint;
 import com.ashenox.starter.security.service.DatabaseUserDetailsService;
+import com.ashenox.starter.shared.config.AppProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -37,6 +40,7 @@ public class SecurityConfig  {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ApiAuthenticationEntryPoint authenticationEntryPoint;
     private final ApiAccessDeniedHandler accessDeniedHandler;
+    private final AppProperties appProperties;
 
     //Dao Authenticador provider
 
@@ -59,11 +63,11 @@ public class SecurityConfig  {
 
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(List.of("Content-Type", "X-XSRF-TOKEN"));
         configuration.setAllowCredentials(true);
 
         // Opcional, pero útil si después querés leer headers específicos desde el front
-        configuration.setExposedHeaders(List.of("Authorization", "X-Request-Id"));
+        configuration.setExposedHeaders(List.of("X-Request-Id"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -84,8 +88,18 @@ public class SecurityConfig  {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        csrfTokenRepository.setCookieCustomizer(cookie -> cookie
+                .path("/")
+                .sameSite("Lax")
+                .secure(appProperties.getSecurity().getCookies().isSecure()));
+        CsrfTokenRequestAttributeHandler csrfRequestHandler = new CsrfTokenRequestAttributeHandler();
+        csrfRequestHandler.setCsrfRequestAttributeName(null);
+
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(csrfTokenRepository)
+                        .csrfTokenRequestHandler(csrfRequestHandler))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authenticationProvider(daoAuthenticationProvider())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -96,11 +110,13 @@ public class SecurityConfig  {
 
                 .authorizeHttpRequests(auth -> auth
                         // Auth endpoints
-                        .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/auth/check").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/auth/forgot-password").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/auth/reset-password").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/auth/reset-password").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/csrf").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/logout").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/reset-password").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/reset-password/validate").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/public/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/public/**").permitAll()
                         .requestMatchers("/api/admin/**")

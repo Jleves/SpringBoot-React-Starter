@@ -124,6 +124,9 @@ Política de cookies:
 - `Secure=true` en producción y `false` exclusivamente en desarrollo local.
 - No establecer `Domain`, porque frontend y API compartirán sitio.
 - No devolver access ni refresh tokens en JSON ni aceptar Bearer como mecanismo alternativo.
+- Centralizar la creación, lectura y eliminación de `ACCESS_TOKEN` y `REFRESH_TOKEN` en un componente HTTP dedicado, por ejemplo `AuthCookieService`; `JWTUtil` seguirá generando el access JWT y `AuthSessionService` seguirá generando y rotando el valor `sessionId.secret`, sin depender de APIs HTTP.
+- Generar `XSRF-TOKEN` mediante `CookieCsrfTokenRepository`, no mediante un generador propio, y aplicar CSRF a todas las operaciones mutantes, incluidos login, refresh, logout y reset de contraseña.
+- Mantener los nombres de cookies como constantes del contrato y obtener `Secure` desde configuración tipada, con valor verdadero por defecto y falso solamente en desarrollo local y tests.
 
 Comportamiento de sesión:
 
@@ -131,9 +134,25 @@ Comportamiento de sesión:
 - Refresh rota el secreto dentro de la misma sesión y se ejecuta transaccionalmente.
 - Si se reutiliza un secreto anterior o no coincide su hash, se revoca esa sesión.
 - Dos refresh concurrentes no pueden producir dos tokens válidos.
-- Logout revoca solamente la sesión actual.
+- Derivar el estado de la sesión desde `revokedAt` y `expiresAt`, sin persistir un enum redundante: una sesión está revocada cuando `revokedAt` no es nulo, expirada cuando superó `expiresAt` y activa únicamente cuando no está revocada ni expirada.
+- Garantizar que la revocación provocada por reutilización, hash incorrecto o conflicto concurrente se confirme aunque el refresh termine con error; el rollback de la rotación no puede restaurar la sesión. Resolverlo mediante un límite transaccional independiente —si se utiliza `REQUIRES_NEW`, debe ejecutarse desde otro bean administrado por Spring— o mediante una coordinación equivalente que confirme `revokedAt` antes de lanzar el error público.
+- Responder con un error público genérico para refresh inválido, expirado o reutilizado; registrar el motivo específico solamente en logs de seguridad por `sessionId`, nunca mediante el token o su secreto.
+- Logout valida el refresh presentado, revoca solamente la sesión actual y elimina las cookies. Debe ser idempotente: si falta la cookie, es inválida o la sesión ya estaba revocada, igualmente elimina las cookies y devuelve `204 No Content`.
 - Restablecer la contraseña revoca todas las sesiones del usuario.
+- La actualización de contraseña, el consumo del reset token y la revocación global deben participar de un único resultado atómico; cualquier fallo revierte las tres operaciones.
 - El access JWT puede continuar válido hasta 15 minutos si fue robado, límite documentado del diseño stateless.
+- Incorporar códigos uniformes para refresh inválido y CSRF inválido dentro de `ApiError`, sin exponer si un secreto fue reutilizado.
+
+Pruebas backend mínimas de la etapa:
+
+- Verificar nombres, paths, `HttpOnly`, `SameSite`, `Secure`, `Max-Age` y eliminación de cookies por perfil.
+- Verificar que login y refresh no exponen tokens en el body y que Bearer deja de aceptarse.
+- Verificar CSRF ausente, inválido y válido en operaciones mutantes.
+- Verificar sesiones independientes, rotación, expiración, reutilización, refresh concurrente y logout selectivo e idempotente.
+- Verificar contra la base que `revokedAt` permanece persistido después de responder el error de reutilización o concurrencia.
+- Verificar que el reset de contraseña consume el token y revoca todas las sesiones en la misma transacción.
+
+La arquitectura, los flujos y las pruebas manuales complementarias se detallan en `GUIA_ETAPA_3_COOKIES_Y_SESIONES.md`.
 
 **Criterio de salida:** login, navegación autenticada, refresh y logout funcionan sin exponer tokens a JavaScript y las mutaciones sin CSRF reciben `403`.
 

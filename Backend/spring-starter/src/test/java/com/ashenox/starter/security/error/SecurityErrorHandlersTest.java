@@ -9,6 +9,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.web.csrf.MissingCsrfTokenException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
@@ -43,6 +44,14 @@ class SecurityErrorHandlersTest {
                 request, response, new AccessDeniedException("sensitive"));
 
         assertResponse(403, ApiErrorCode.ACCESS_DENIED);
+    }
+
+    @Test
+    void accessDeniedHandlerReturnsSpecificCsrfResponse() throws Exception {
+        new ApiAccessDeniedHandler(responder).handle(
+                request, response, new MissingCsrfTokenException(null));
+
+        assertResponse(403, ApiErrorCode.CSRF_TOKEN_INVALID);
     }
 
     private void assertResponse(int status, ApiErrorCode code) throws Exception {
