@@ -4,6 +4,8 @@ package com.ashenox.starter.security.config;
 
 
 import com.ashenox.starter.security.jwt.JwtRequestFilter;
+import com.ashenox.starter.security.error.ApiAccessDeniedHandler;
+import com.ashenox.starter.security.error.ApiAuthenticationEntryPoint;
 import com.ashenox.starter.security.service.DatabaseUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +35,8 @@ public class SecurityConfig  {
     private final DatabaseUserDetailsService userDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ApiAuthenticationEntryPoint authenticationEntryPoint;
+    private final ApiAccessDeniedHandler accessDeniedHandler;
 
     //Dao Authenticador provider
 
@@ -59,7 +63,7 @@ public class SecurityConfig  {
         configuration.setAllowCredentials(true);
 
         // Opcional, pero útil si después querés leer headers específicos desde el front
-        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setExposedHeaders(List.of("Authorization", "X-Request-Id"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -85,6 +89,10 @@ public class SecurityConfig  {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authenticationProvider(daoAuthenticationProvider())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                )
 
                 .authorizeHttpRequests(auth -> auth
                         // Auth endpoints

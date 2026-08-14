@@ -45,7 +45,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request);
-        SECURITY_LOG.info("LOGIN_SUCCESS - Usuario: {}", response.getUser().getEmail());
+        SECURITY_LOG.info("event=login_success userId={}", response.getUser().getId());
         return ResponseEntity.ok(response);
     }
 
@@ -55,7 +55,8 @@ public class AuthController {
         User user = issuedSession.session().getUser();
         UserDetails principal = AuthenticatedUser.from(user);
         String accessToken = jwtUtil.generateToken(principal);
-        SECURITY_LOG.info("TOKEN_REFRESH_SUCCESS - Usuario: {}", user.getEmail());
+        SECURITY_LOG.info("event=token_refresh_success userId={} sessionId={}",
+                user.getId(), issuedSession.session().getId());
         return ResponseEntity.ok(new TokenRefreshResponse(accessToken, issuedSession.refreshToken()));
     }
 

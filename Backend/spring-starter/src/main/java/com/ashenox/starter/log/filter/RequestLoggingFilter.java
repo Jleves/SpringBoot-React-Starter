@@ -4,65 +4,47 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.UUID;
 
-@Slf4j
 public class RequestLoggingFilter extends OncePerRequestFilter {
 
+    public static final String REQUEST_ID_ATTRIBUTE = RequestLoggingFilter.class.getName() + ".requestId";
+    public static final String USER_ID_ATTRIBUTE = RequestLoggingFilter.class.getName() + ".userId";
+    public static final String REQUEST_ID_HEADER = "X-Request-Id";
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestLoggingFilter.class);
+
+    public static String getRequestId(HttpServletRequest request) {
+        Object requestId = request.getAttribute(REQUEST_ID_ATTRIBUTE);
+        return requestId == null ? "unknown" : requestId.toString();
+    }
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                  HttpServletResponse response, 
-                                  FilterChain filterChain) throws ServletException, IOException {
-        
-        // Generar ID único para la request
-        String requestId = UUID.randomUUID().toString().substring(0, 8);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        String requestId = UUID.randomUUID().toString();
+        request.setAttribute(REQUEST_ID_ATTRIBUTE, requestId);
+        response.setHeader(REQUEST_ID_HEADER, requestId);
         MDC.put("requestId", requestId);
-        
+
         String method = request.getMethod();
-        String uri = request.getRequestURI();
-        String clientIp = getClientIp(request);
-        
+        String path = request.getRequestURI();
         long startTime = System.currentTimeMillis();
-        
-        // Log de entrada
-        log.info("🌐 REQUEST [{}] {} {} - IP: {}", requestId, method, uri, clientIp);
-        
+        LOGGER.info("request_started method={} path={}", method, path);
+
         try {
             filterChain.doFilter(request, response);
         } finally {
-            // Log de salida
             long duration = System.currentTimeMillis() - startTime;
-            int status = response.getStatus();
-            
-            log.info("✅ RESPONSE [{}] {} {} - Status: {} - {}ms", 
-                    requestId, method, uri, status, duration);
-            
-            // Log especial para errores
-            if (status >= 400) {
-                log.warn("⚠️ ERROR_RESPONSE [{}] {} {} - Status: {} - {}ms", 
-                        requestId, method, uri, status, duration);
-            }
-            
-            MDC.clear();
+            Object userId = request.getAttribute(USER_ID_ATTRIBUTE);
+            LOGGER.info("request_completed method={} path={} status={} durationMs={} userId={}",
+                    method, path, response.getStatus(), duration, userId == null ? "anonymous" : userId);
+            MDC.remove("requestId");
         }
-    }
-    
-    private String getClientIp(HttpServletRequest request) {
-        String xForwardedFor = request.getHeader("X-Forwarded-For");
-        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
-            return xForwardedFor.split(",")[0].trim();
-        }
-        
-        String xRealIp = request.getHeader("X-Real-IP");
-        if (xRealIp != null && !xRealIp.isEmpty()) {
-            return xRealIp;
-        }
-        
-        return request.getRemoteAddr();
     }
 }

@@ -1,10 +1,10 @@
 package com.ashenox.starter.auth.service.impl;
 
-import com.ashenox.starter.Exception.JWT.InvalidTokenException;
+import com.ashenox.starter.security.error.InvalidTokenException;
 import com.ashenox.starter.auth.passwordreset.model.PasswordResetToken;
 import com.ashenox.starter.auth.passwordreset.repository.PasswordResetTokenRepository;
 import com.ashenox.starter.auth.service.PasswordResetService;
-import com.ashenox.starter.email.service.Interface.EmailService;
+import com.ashenox.starter.email.service.EmailService;
 import com.ashenox.starter.user.repository.UserRepository;
 import com.ashenox.starter.user.support.EmailNormalizer;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,7 @@
-package com.ashenox.starter.email.service.Impl;
+package com.ashenox.starter.email.service;
 
 
 
-import com.ashenox.starter.email.service.Interface.EmailService;
 import com.ashenox.starter.shared.config.AppProperties;
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
@@ -12,8 +11,6 @@ import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -31,14 +28,13 @@ import static com.ashenox.starter.email.config.EmailUtils.*;
 
 @Service
 @RequiredArgsConstructor
-public class EmailServiceImple implements EmailService {
+public class EmailServiceImpl implements EmailService {
     private static final String NEW_USER_ACCOUNT_VERIFICATION = "New User Account Verification";
     public static final String UTF_8_ENCODING = "UTF-8";
     public static final String EMAIL_TEMPLATE = "emailtemplate";
     public static final String TEXT_HTML_ENCONDING = "text/html";
     public static final String RESTABLECER_CONTRASEÑA = "Restablecer contraseña";
 
-    private static final Logger log = LoggerFactory.getLogger(EmailServiceImple.class);
     private final JavaMailSender emailSender;
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;

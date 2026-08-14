@@ -1,6 +1,6 @@
 package com.ashenox.starter.auth.service.impl;
 
-import com.ashenox.starter.Exception.JWT.InvalidCredentialsException;
+import com.ashenox.starter.security.error.InvalidCredentialsException;
 import com.ashenox.starter.auth.model.AuthResponse;
 import com.ashenox.starter.auth.model.LoginRequest;
 import com.ashenox.starter.auth.session.service.AuthSessionService;
