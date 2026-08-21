@@ -1,21 +1,22 @@
 package com.ashenox.starter.auth.service.impl;
 
 import com.ashenox.starter.security.error.InvalidTokenException;
+import com.ashenox.starter.auth.passwordreset.event.PasswordResetRequested;
 import com.ashenox.starter.auth.passwordreset.model.PasswordResetToken;
 import com.ashenox.starter.auth.passwordreset.repository.PasswordResetTokenRepository;
 import com.ashenox.starter.auth.session.service.AuthSessionService;
 import com.ashenox.starter.auth.service.PasswordResetService;
-import com.ashenox.starter.email.service.EmailService;
+import com.ashenox.starter.shared.config.AppProperties;
 import com.ashenox.starter.user.repository.UserRepository;
 import com.ashenox.starter.user.support.EmailNormalizer;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
 
@@ -23,13 +24,12 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class PasswordResetServiceImpl implements PasswordResetService {
 
-    private static final Duration RESET_TOKEN_TTL = Duration.ofMinutes(30);
-
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository tokenRepository;
-    private final EmailService emailService;
+    private final ApplicationEventPublisher eventPublisher;
     private final PasswordEncoder passwordEncoder;
     private final AuthSessionService authSessionService;
+    private final AppProperties appProperties;
     private final SecureRandom secureRandom = new SecureRandom();
 
     @Override
@@ -41,10 +41,12 @@ public class PasswordResetServiceImpl implements PasswordResetService {
                     .orElseGet(PasswordResetToken::new);
             resetToken.setUser(user);
             resetToken.setTokenHash(hashToken(plainToken));
-            resetToken.setExpiresAt(Instant.now().plus(RESET_TOKEN_TTL));
+            resetToken.setExpiresAt(Instant.now().plus(
+                    appProperties.getSecurity().getPasswordReset().getTokenTtl()));
             resetToken.setUsedAt(null);
             tokenRepository.save(resetToken);
-            emailService.sendPasswordResetEmail(user.getEmail(), user.getEmail(), plainToken);
+            eventPublisher.publishEvent(new PasswordResetRequested(
+                    user.getId(), user.getEmail(), user.getEmail(), plainToken));
         });
     }
 

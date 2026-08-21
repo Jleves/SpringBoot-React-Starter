@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
+import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,6 +35,14 @@ class AppPropertiesValidationTest {
 
         assertThat(validator.validate(properties))
                 .anyMatch(violation -> violation.getPropertyPath().toString().contains("configurationValid"));
+    }
+
+    @Test
+    void rejectsNonPositivePasswordResetTtl() {
+        properties.getSecurity().getPasswordReset().setTokenTtl(Duration.ZERO);
+
+        assertThat(validator.validate(properties))
+                .anyMatch(violation -> violation.getPropertyPath().toString().contains("tokenTtlValid"));
     }
 
     private AppProperties validProperties() {

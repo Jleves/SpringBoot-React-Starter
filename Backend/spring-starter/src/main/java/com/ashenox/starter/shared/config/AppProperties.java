@@ -41,6 +41,21 @@ public class AppProperties {
 
         @Valid
         private Cookies cookies = new Cookies();
+
+        @Valid
+        private PasswordReset passwordReset = new PasswordReset();
+    }
+
+    @Getter
+    @Setter
+    public static class PasswordReset {
+        @NotNull
+        private Duration tokenTtl = Duration.ofMinutes(30);
+
+        @AssertTrue(message = "el TTL del token de recuperación debe ser mayor que cero")
+        public boolean isTokenTtlValid() {
+            return tokenTtl != null && !tokenTtl.isZero() && !tokenTtl.isNegative();
+        }
     }
 
     @Getter

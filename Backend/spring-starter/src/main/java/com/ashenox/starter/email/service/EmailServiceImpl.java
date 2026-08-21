@@ -33,8 +33,6 @@ public class EmailServiceImpl implements EmailService {
     public static final String UTF_8_ENCODING = "UTF-8";
     public static final String EMAIL_TEMPLATE = "emailtemplate";
     public static final String TEXT_HTML_ENCONDING = "text/html";
-    public static final String RESTABLECER_CONTRASEÑA = "Restablecer contraseña";
-
     private final JavaMailSender emailSender;
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
@@ -169,27 +167,6 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    @Override
-    @Async
-    public void sendPasswordResetEmail(String name, String to, String token) {
-        try {
-            Context context = new Context();
-            context.setVariables(Map.of("name", name, "url", getPasswordResetUrl(frontendBaseUrl(), token)));
-            String html = templateEngine.process("password-reset-template", context); // Nuevo template
-            MimeMessage message = getMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
-            helper.setPriority(1);
-            helper.setSubject(RESTABLECER_CONTRASEÑA);
-            helper.setFrom(fromEmail());
-            helper.setTo(to);
-            helper.setText(html, true);
-            emailSender.send(message);
-        } catch (Exception e) {
-            
-            throw new RuntimeException("Error al enviar email: " + e.getMessage());
-        }
-    }
-
     private MimeMessage getMimeMessage() {
         return emailSender.createMimeMessage();
     }
@@ -200,10 +177,6 @@ public class EmailServiceImpl implements EmailService {
 
     private String verificationBaseUrl() {
         return appProperties.getMail().getVerificationBaseUrl().toString();
-    }
-
-    private String frontendBaseUrl() {
-        return appProperties.getMail().getFrontendBaseUrl().toString();
     }
 
     private String getContentId(String filename) {

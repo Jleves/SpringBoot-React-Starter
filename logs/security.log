@@ -1,0 +1,8 @@
+[2026-08-21 10:13:00] [SECURITY] [ded7948a-b05c-4d5b-a54f-e61545c2f227] event=login_success userId=1 sessionId=6dcf6599-ca15-4e01-b0a6-3bc28f3c7ac7
+[2026-08-21 10:20:31] [SECURITY] [2bab076d-02fc-4552-9184-6d688c13b841] event=login_success userId=1 sessionId=634ba931-4aa6-4433-8bd3-f0c105250d2b
+[2026-08-21 10:25:27] [SECURITY] [66260b11-004a-4244-84bb-e0419690dfd1] event=login_success userId=1 sessionId=9165c581-992a-4e4a-9fd4-39d81f432110
+[2026-08-21 10:34:30] [SECURITY] [c92a1997-93ef-42d6-b30b-1eb86906a237] event=login_success userId=1 sessionId=1db85322-1d73-4f78-8eae-737104dc2831
+[2026-08-21 10:35:51] [SECURITY] [f1130639-0a82-47d2-9870-e98d60796a22] event=token_refresh_success userId=1 sessionId=1db85322-1d73-4f78-8eae-737104dc2831
+[2026-08-21 14:26:08] [SECURITY] [4fac9641-7a14-4862-b254-d136662fc3a9] event=login_success userId=1 sessionId=e8e82fd3-d10b-4253-ab2f-9c5114d929a0
+[2026-08-21 14:36:32] [SECURITY] [bffd55a1-01b1-4846-b6df-0b4c7be84d96] event=login_success userId=1 sessionId=6e5448b5-5627-46ae-828a-010b671500fb
+[2026-08-21 14:38:59] [SECURITY] [f59a4525-f363-45ea-8803-a53ba6d6c77b] event=login_success userId=2 sessionId=82b6eae3-0276-47f9-a71e-e10ee6a3f382
