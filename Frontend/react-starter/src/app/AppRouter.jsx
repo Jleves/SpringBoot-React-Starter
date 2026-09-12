@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { CreateUserPage } from '../admin/pages/CreateUserPage.jsx'
 import { ForgotPasswordPage } from '../auth/pages/ForgotPasswordPage.jsx'
 import { LoginPage } from '../auth/pages/LoginPage.jsx'
 import { ResetPasswordPage } from '../auth/pages/ResetPasswordPage.jsx'
@@ -20,6 +21,9 @@ export function AppRouter() {
         <Route path="/app" element={<AppLayout />}>
           <Route index element={<Navigate to="profile" replace />} />
           <Route path="profile" element={<ProfilePage />} />
+          <Route element={<ProtectedRoute requiredRole="SUPER_ADMIN" />}>
+            <Route path="admin/users/new" element={<CreateUserPage />} />
+          </Route>
         </Route>
       </Route>
 

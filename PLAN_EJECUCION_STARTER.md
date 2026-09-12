@@ -197,7 +197,42 @@ Incluye alta administrativa, modelo público de usuario, estado de cuenta, recup
 
 Incluye únicamente el shell React, cliente HTTP con cookies y CSRF, estado de autenticación, refresh single-flight, pantallas y rutas protegidas; no incluye componentes de negocio.
 
-### Etapa 6 — OpenAPI, observabilidad y operación local
+### Etapa 6 — Alta administrativa integrada con React
+
+Completar el flujo de alta administrativa desde el frontend, adaptando el backend incorporado en la etapa 4 al nuevo contrato de autorización.
+
+**Contrato de autorización:** únicamente el superusuario (`SUPER_ADMIN`) puede realizar altas administrativas y crear cuentas con rol `USER`, `ADMIN` o `SUPER_ADMIN`. `ADMIN` y `USER` no pueden crear ninguna cuenta, ni desde la interfaz ni mediante llamadas directas a la API. Esta regla reemplaza los permisos de alta implementados en la etapa 4.
+
+**Estado de implementación (12/09/2026):**
+
+- Backend implementado: `AdminUserController` expone `POST /api/admin/users`, recibe `email`, `password` y `role`, valida el request y responde `201 Created` con `UserResponse`, sin contraseña ni hash.
+- `AdminUserServiceImpl` normaliza el email, codifica la contraseña y persiste el usuario habilitado dentro de una transacción. La contraseña inicial se valida entre 8 y 72 caracteres.
+- La autorización HTTP, el controlador y el servicio restringen el alta a `SUPER_ADMIN`. `ADMIN` y `USER` no pueden crear cuentas de ningún rol. El endpoint conserva autenticación y CSRF.
+- `AdminUserProvisioningIntegrationTest` verifica los tres roles de destino, login y perfil de las cuentas creadas, rechazos sin persistencia para `ADMIN` y `USER`, validaciones, normalización, hash, ausencia de contraseña en la respuesta, duplicados, autenticación y CSRF. `AdminUserServiceTest` verifica el rechazo al invocar directamente el servicio sin pasar por HTTP.
+- Frontend implementado: pantalla `/app/admin/users/new`, navegación y ruta exclusivas de `SUPER_ADMIN`, formulario de email/contraseña/rol, cliente HTTP con cookies y CSRF, confirmación pública, limpieza de contraseña y manejo de errores y envíos simultáneos.
+- Verificación ejecutada: 7 pruebas backend de alta y permisos aprobadas con Java 21 y perfil `test` (H2); 22 pruebas frontend aprobadas; lint y build de React aprobados. La prueba backend verifica alta, login y perfil mediante HTTP simulado (MockMvc); las pruebas frontend verifican formulario, roles y transporte HTTP con respuestas simuladas. No se realizó una prueba completa en navegador contra MySQL.
+
+**Alcance de esta etapa:**
+
+- Restringir el alta a `SUPER_ADMIN` en el controlador y el servicio backend, y ajustar las reglas HTTP de seguridad que correspondan. Mantener autenticación y CSRF; rechazar con `403` los intentos de alta de `ADMIN` y `USER`, independientemente del rol solicitado.
+- Actualizar y ejecutar las pruebas backend antes de integrar la pantalla: verificar que `SUPER_ADMIN` puede crear los tres roles y que `ADMIN` y `USER` no pueden crear ninguno, sin persistir cuentas tras un rechazo. Sustituir las expectativas anteriores que permitían altas a `ADMIN` y completar las validaciones de entrada pendientes.
+- Agregar el endpoint y un servicio frontend para `POST /api/admin/users`, reutilizando el cliente HTTP con cookies, CSRF y manejo uniforme de errores.
+- Incorporar una pantalla de alta dentro del layout autenticado, con acceso de navegación visible únicamente para `SUPER_ADMIN` y una ruta protegida por ese rol, incluso al ingresar la URL directamente. El backend mantiene la autorización definitiva.
+- Crear un formulario con email, contraseña inicial y rol, validaciones coherentes con el contrato backend y mensajes por campo.
+- Ofrecer al superusuario los roles `USER`, `ADMIN` y `SUPER_ADMIN` en el selector del formulario.
+- Mostrar estado de envío, evitar envíos duplicados y presentar confirmación con los datos públicos del usuario creado; limpiar la contraseña tras el alta exitosa, sin persistirla en almacenamiento web ni registrarla en logs.
+- Manejar email duplicado (`409`), validaciones (`400`), falta de permisos (`403`), sesión vencida y errores de red, conservando mensajes comprensibles y sin mostrar una creación exitosa si la petición falla.
+- Verificar el flujo integrado: crear una cuenta desde React, cerrar la sesión administrativa e iniciar sesión con la cuenta nueva, comprobando su perfil y rol.
+- Incorporar pruebas frontend para acceso por rol, opciones del selector, envío exitoso y manejo de errores; ejecutar lint, tests y build, junto con las pruebas backend afectadas.
+- Mantener el alcance en el alta administrativa: listado, edición, eliminación y habilitación/deshabilitación desde la interfaz quedan fuera de esta etapa.
+
+**Criterio de salida:** únicamente `SUPER_ADMIN` puede crear cuentas desde React y la API, con cualquiera de los tres roles; `ADMIN` y `USER` no pueden acceder al alta ni crear cuentas mediante peticiones directas. La cuenta creada puede iniciar sesión y los errores de validación, duplicados y autorización se muestran correctamente. Pruebas backend y frontend relevantes, lint y build aprobados.
+
+**Commit de cierre propuesto:** `feat(admin): add administrative user creation flow`
+
+Incluye la pantalla, navegación y protección exclusiva para `SUPER_ADMIN`, integración con el endpoint existente y pruebas del flujo de alta. El cambio de autorización backend y sus pruebas se realizan antes en un commit separado y explícito.
+
+### Etapa 7 — OpenAPI, observabilidad y operación local
 
 - Incorporar OpenAPI/Swagger compatible con Spring Boot 4.
 - Documentar cookies, CSRF, respuestas y códigos de error.
@@ -213,7 +248,7 @@ Incluye únicamente el shell React, cliente HTTP con cookies y CSRF, estado de a
 
 Incluye OpenAPI, Actuator, logs operativos, Docker Compose, `.env.example` y documentación de ejecución y despliegue local.
 
-### Etapa 7 — Verificación y automatización
+### Etapa 8 — Verificación y automatización
 
 Backend:
 
