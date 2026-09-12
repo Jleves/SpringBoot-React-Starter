@@ -85,20 +85,53 @@ class AdminUserProvisioningIntegrationTest {
     }
 
     @Test
-    void adminCreatesUserButCannotCreateSuperAdmin() throws Exception {
-        AuthCookies auth = login("admin@example.com");
-
-        createUser(auth, "created@example.com", "USER")
-                .andExpect(status().isCreated());
-
-        createUser(auth, "forbidden@example.com", "SUPER_ADMIN")
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
-
-        assertThat(userRepository.existsByEmail("created@example.com")).isTrue();
-        assertThat(userRepository.existsByEmail("forbidden@example.com")).isFalse();
+    void superAdminCreatesEveryRoleAndNewAccountCanLogin() throws Exception {
+        AuthCookies auth = login("super@example.com");
+        for (Role role : Role.values()) {
+            String email = "created-" + role.name().toLowerCase() + "@example.com";
+            createUser(auth, email, role.name()).andExpect(status().isCreated());
+            Cookie csrf = requestCsrfCookie();
+            MvcResult result = mockMvc.perform(post("/api/auth/login")
+                            .cookie(csrf).header("X-XSRF-TOKEN", csrf.getValue())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"email\":\"" + email + "\",\"password\":\"initial-password\"}"))
+                    .andExpect(status().isOk()).andReturn();
+            mockMvc.perform(get("/api/auth/me")
+                            .cookie(result.getResponse().getCookie(AuthCookieService.ACCESS_TOKEN)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.email").value(email))
+                    .andExpect(jsonPath("$.rol").value(role.name()));
+        }
     }
 
+    @Test
+    void adminAndUserCannotCreateAnyRole() throws Exception {
+        for (String actor : new String[]{"admin@example.com", "user@example.com"}) {
+            AuthCookies auth = login(actor);
+            for (Role role : Role.values()) {
+                createUser(auth, "forbidden@example.com", role.name())
+                        .andExpect(status().isForbidden())
+                        .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
+                assertThat(userRepository.existsByEmail("forbidden@example.com")).isFalse();
+            }
+        }
+    }
+
+    @Test
+    void rejectsInvalidInputWithoutPersistingUsers() throws Exception {
+        AuthCookies auth = login("super@example.com");
+        for (String body : new String[]{
+                userBody("invalid-email", "USER"),
+                "{\"email\":\"invalid@example.com\",\"password\":\"short\",\"role\":\"USER\"}",
+                "{\"email\":\"invalid@example.com\",\"password\":\"initial-password\"}",
+                userBody("invalid@example.com", "UNKNOWN")}) {
+            mockMvc.perform(post("/api/admin/users").cookie(auth.csrf(), auth.access())
+                            .header("X-XSRF-TOKEN", auth.csrf().getValue())
+                            .contentType(MediaType.APPLICATION_JSON).content(body))
+                    .andExpect(status().isBadRequest());
+            assertThat(userRepository.count()).isEqualTo(3);
+        }
+    }
     @Test
     void rejectsRegularUserAndDuplicateEmail() throws Exception {
         AuthCookies regularUser = login("user@example.com");
@@ -121,7 +154,7 @@ class AdminUserProvisioningIntegrationTest {
                         .content(userBody("anonymous@example.com", "USER")))
                 .andExpect(status().isUnauthorized());
 
-        AuthCookies auth = login("admin@example.com");
+        AuthCookies auth = login("super@example.com");
         mockMvc.perform(post("/api/admin/users")
                         .cookie(auth.access())
                         .contentType(MediaType.APPLICATION_JSON)

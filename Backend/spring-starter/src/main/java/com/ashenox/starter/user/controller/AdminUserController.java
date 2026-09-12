@@ -23,7 +23,7 @@ public class AdminUserController {
     private final AdminUserService adminUserService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<UserResponse> create(
             @Valid @RequestBody CreateUserRequest request,
             @AuthenticationPrincipal AuthenticatedUser principal) {

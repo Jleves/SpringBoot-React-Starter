@@ -119,6 +119,7 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.GET, "/api/auth/reset-password/validate").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/public/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/public/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/admin/users").hasRole("SUPER_ADMIN")
                         .requestMatchers("/api/admin/**")
                         .hasAnyRole("ADMIN", "SUPER_ADMIN")
 

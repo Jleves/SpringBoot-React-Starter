@@ -23,11 +23,8 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     @Transactional
     public UserResponse create(CreateUserRequest request, Role actorRole) {
-        if (actorRole != Role.ADMIN && actorRole != Role.SUPER_ADMIN) {
-            throw new AccessDeniedException("Se requiere un rol administrativo");
-        }
-        if (request.role() == Role.SUPER_ADMIN && actorRole != Role.SUPER_ADMIN) {
-            throw new AccessDeniedException("Solamente SUPER_ADMIN puede crear otro SUPER_ADMIN");
+        if (actorRole != Role.SUPER_ADMIN) {
+            throw new AccessDeniedException("Solamente SUPER_ADMIN puede crear usuarios");
         }
 
         String email = EmailNormalizer.normalize(request.email());
