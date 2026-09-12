@@ -1,1 +1,72 @@
 [2026-08-22 10:49:06] [WARN ] [com.zaxxer.hikari.pool.HikariPool] [] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=18h34s518ms652µs600ns).
+[2026-09-12 16:09:25] [INFO ] [c.a.starter.SpringStarterApplication] [] Starting SpringStarterApplication using Java 21.0.7 with PID 6492 (C:\Users\jlinf\Desktop\Programacion\Trabajo\InitStarted\spring-starter\Backend\spring-starter\target\classes started by jlinf in C:\Users\jlinf\Desktop\Programacion\Trabajo\InitStarted\spring-starter)
+[2026-09-12 16:09:25] [INFO ] [c.a.starter.SpringStarterApplication] [] No active profile set, falling back to 1 default profile: "default"
+[2026-09-12 16:09:27] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Initializing ProtocolHandler ["http-nio-8080"]
+[2026-09-12 16:09:27] [INFO ] [o.a.catalina.core.StandardService] [] Starting service [Tomcat]
+[2026-09-12 16:09:27] [INFO ] [o.a.catalina.core.StandardEngine] [] Starting Servlet engine: [Apache Tomcat/11.0.22]
+[2026-09-12 16:09:28] [INFO ] [org.flywaydb.core.FlywayExecutor] [] Database: jdbc:mysql://127.0.0.1:3306/springStarter (MySQL 8.4)
+[2026-09-12 16:09:28] [INFO ] [o.f.core.internal.command.DbValidate] [] Successfully validated 1 migration (execution time 00:00.036s)
+[2026-09-12 16:09:28] [INFO ] [o.f.core.internal.command.DbMigrate] [] Current version of schema `springstarter`: 1
+[2026-09-12 16:09:28] [INFO ] [o.f.core.internal.command.DbMigrate] [] Schema `springstarter` is up to date. No migration necessary.
+[2026-09-12 16:09:28] [WARN ] [org.hibernate.orm.deprecation] [] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+[2026-09-12 16:09:30] [WARN ] [o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer] [] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+[2026-09-12 16:09:31] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Starting ProtocolHandler ["http-nio-8080"]
+[2026-09-12 16:09:31] [INFO ] [c.a.starter.SpringStarterApplication] [] Started SpringStarterApplication in 6.366 seconds (process running for 6.81)
+[2026-09-12 16:09:31] [INFO ] [c.a.s.u.b.SuperAdminBootstrap] [] Bootstrap SUPER_ADMIN omitido: el usuario configurado ya existe
+[2026-09-12 16:24:28] [INFO ] [c.a.starter.SpringStarterApplication] [] Starting SpringStarterApplication using Java 21.0.7 with PID 24292 (C:\Users\jlinf\Desktop\Programacion\Trabajo\InitStarted\spring-starter\Backend\spring-starter\target\classes started by jlinf in C:\Users\jlinf\Desktop\Programacion\Trabajo\InitStarted\spring-starter)
+[2026-09-12 16:24:28] [INFO ] [c.a.starter.SpringStarterApplication] [] No active profile set, falling back to 1 default profile: "default"
+[2026-09-12 16:24:30] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Initializing ProtocolHandler ["http-nio-8080"]
+[2026-09-12 16:24:30] [INFO ] [o.a.catalina.core.StandardService] [] Starting service [Tomcat]
+[2026-09-12 16:24:30] [INFO ] [o.a.catalina.core.StandardEngine] [] Starting Servlet engine: [Apache Tomcat/11.0.22]
+[2026-09-12 16:24:31] [INFO ] [org.flywaydb.core.FlywayExecutor] [] Database: jdbc:mysql://127.0.0.1:3306/springStarter (MySQL 8.4)
+[2026-09-12 16:24:31] [INFO ] [o.f.core.internal.command.DbValidate] [] Successfully validated 1 migration (execution time 00:00.025s)
+[2026-09-12 16:24:31] [INFO ] [o.f.core.internal.command.DbMigrate] [] Current version of schema `springstarter`: 1
+[2026-09-12 16:24:31] [INFO ] [o.f.core.internal.command.DbMigrate] [] Schema `springstarter` is up to date. No migration necessary.
+[2026-09-12 16:24:31] [WARN ] [org.hibernate.orm.deprecation] [] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+[2026-09-12 16:24:33] [WARN ] [o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer] [] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+[2026-09-12 16:24:34] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Starting ProtocolHandler ["http-nio-8080"]
+[2026-09-12 16:24:34] [INFO ] [c.a.starter.SpringStarterApplication] [] Started SpringStarterApplication in 5.999 seconds (process running for 6.341)
+[2026-09-12 16:24:34] [INFO ] [c.a.s.u.b.SuperAdminBootstrap] [] Bootstrap SUPER_ADMIN omitido: el usuario configurado ya existe
+[2026-09-12 16:26:27] [INFO ] [o.a.c.c.C.[Tomcat].[localhost].[/]] [] Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [76bec213-136a-4e68-9275-a75edbb3364e] request_started method=GET path=/api/auth/csrf
+[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [76bec213-136a-4e68-9275-a75edbb3364e] request_completed method=GET path=/api/auth/csrf status=204 durationMs=201 userId=anonymous sessionId=none
+[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [a1ec9acd-1876-4d94-ac78-dc042e243d53] request_started method=GET path=/api/auth/me
+[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [a1ec9acd-1876-4d94-ac78-dc042e243d53] request_completed method=GET path=/api/auth/me status=401 durationMs=68 userId=anonymous sessionId=none
+[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [f07385ec-0260-4cc7-b5bc-76110fd88a3d] request_started method=GET path=/api/auth/me
+[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [7910525e-d0b4-4250-bc4b-270e14be532c] request_started method=POST path=/api/auth/refresh
+[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [f07385ec-0260-4cc7-b5bc-76110fd88a3d] request_completed method=GET path=/api/auth/me status=401 durationMs=14 userId=anonymous sessionId=none
+[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [7910525e-d0b4-4250-bc4b-270e14be532c] request_completed method=POST path=/api/auth/refresh status=401 durationMs=82 userId=anonymous sessionId=none
+[2026-09-12 16:26:41] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [cd836900-d3e1-4547-9a27-fbb1542c2708] request_started method=POST path=/api/auth/login
+[2026-09-12 16:26:42] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [cd836900-d3e1-4547-9a27-fbb1542c2708] request_completed method=POST path=/api/auth/login status=200 durationMs=1135 userId=anonymous sessionId=none
+[2026-09-12 16:26:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [be613221-f37c-4739-869d-31216181fabd] request_started method=POST path=/api/auth/logout
+[2026-09-12 16:26:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [be613221-f37c-4739-869d-31216181fabd] request_completed method=POST path=/api/auth/logout status=204 durationMs=167 userId=anonymous sessionId=none
+[2026-09-12 16:27:02] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [0be13c78-4be9-44d7-81a8-92bee5c94df3] request_started method=GET path=/api/auth/csrf
+[2026-09-12 16:27:02] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [0be13c78-4be9-44d7-81a8-92bee5c94df3] request_completed method=GET path=/api/auth/csrf status=204 durationMs=13 userId=anonymous sessionId=none
+[2026-09-12 16:27:02] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [019dcfcb-c065-4130-8fac-0eb3a5b90578] request_started method=POST path=/api/auth/forgot-password
+[2026-09-12 16:27:02] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [019dcfcb-c065-4130-8fac-0eb3a5b90578] request_completed method=POST path=/api/auth/forgot-password status=200 durationMs=117 userId=anonymous sessionId=none
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [81d7bb2b-62d6-44b8-b8c3-dae63728e279] request_started method=GET path=/api/auth/reset-password/validate
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [8574071e-3cf7-4e88-9159-5cca38f90ca0] request_started method=GET path=/api/auth/csrf
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [8574071e-3cf7-4e88-9159-5cca38f90ca0] request_completed method=GET path=/api/auth/csrf status=204 durationMs=17 userId=anonymous sessionId=none
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [ddccb34e-f1a7-44ce-bec2-b2b3d5ad0bc9] request_started method=GET path=/api/auth/me
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [ddccb34e-f1a7-44ce-bec2-b2b3d5ad0bc9] request_completed method=GET path=/api/auth/me status=401 durationMs=8 userId=anonymous sessionId=none
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [60049aec-dac1-4149-84c7-18fc058703d7] request_started method=POST path=/api/auth/refresh
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [de0eca96-fb00-4d0c-b6d1-3d9d85831d57] request_started method=GET path=/api/auth/me
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [81d7bb2b-62d6-44b8-b8c3-dae63728e279] request_completed method=GET path=/api/auth/reset-password/validate status=204 durationMs=45 userId=anonymous sessionId=none
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [de0eca96-fb00-4d0c-b6d1-3d9d85831d57] request_completed method=GET path=/api/auth/me status=401 durationMs=0 userId=anonymous sessionId=none
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [60049aec-dac1-4149-84c7-18fc058703d7] request_completed method=POST path=/api/auth/refresh status=401 durationMs=0 userId=anonymous sessionId=none
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [9253277e-7098-421f-9cba-01f9cca1cc13] request_started method=GET path=/api/auth/reset-password/validate
+[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [9253277e-7098-421f-9cba-01f9cca1cc13] request_completed method=GET path=/api/auth/reset-password/validate status=204 durationMs=31 userId=anonymous sessionId=none
+[2026-09-12 16:27:52] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [7ff243a7-a623-4ed6-b978-2f634264f2c9] request_started method=POST path=/api/auth/reset-password
+[2026-09-12 16:27:52] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [7ff243a7-a623-4ed6-b978-2f634264f2c9] request_completed method=POST path=/api/auth/reset-password status=204 durationMs=260 userId=anonymous sessionId=none
+[2026-09-12 16:28:10] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [d2018f62-f494-4f4d-8e89-c262e739e4f0] request_started method=POST path=/api/auth/login
+[2026-09-12 16:28:10] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [d2018f62-f494-4f4d-8e89-c262e739e4f0] request_completed method=POST path=/api/auth/login status=200 durationMs=255 userId=anonymous sessionId=none
+[2026-09-12 16:28:12] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [2a8289dc-9026-48d9-bffa-4e44c6b128a6] request_started method=POST path=/api/auth/logout
+[2026-09-12 16:28:12] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [2a8289dc-9026-48d9-bffa-4e44c6b128a6] request_completed method=POST path=/api/auth/logout status=204 durationMs=29 userId=anonymous sessionId=none
+[2026-09-12 16:31:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [a63b70f7-2713-4863-8abf-28bfdc1af0e8] request_started method=GET path=/api/auth/csrf
+[2026-09-12 16:31:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [a63b70f7-2713-4863-8abf-28bfdc1af0e8] request_completed method=GET path=/api/auth/csrf status=204 durationMs=5 userId=anonymous sessionId=none
+[2026-09-12 16:31:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [b147543f-8d2c-41b1-ad6c-9a94067ced01] request_started method=POST path=/api/auth/login
+[2026-09-12 16:31:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [b147543f-8d2c-41b1-ad6c-9a94067ced01] request_completed method=POST path=/api/auth/login status=200 durationMs=284 userId=anonymous sessionId=none
+[2026-09-12 16:39:04] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [57c8d3dd-d6d5-40ba-875c-c7ea547a2b9b] request_started method=GET path=/api/auth/me
+[2026-09-12 16:39:04] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [57c8d3dd-d6d5-40ba-875c-c7ea547a2b9b] request_completed method=GET path=/api/auth/me status=200 durationMs=109 userId=1 sessionId=c29e2402-65be-4bb3-8d6c-ccdeaf68e7b2
+[2026-09-12 16:39:04] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [87adf653-7d5d-4e11-84e4-b7da4c3e1290] request_started method=GET path=/api/auth/me
+[2026-09-12 16:39:04] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [87adf653-7d5d-4e11-84e4-b7da4c3e1290] request_completed method=GET path=/api/auth/me status=200 durationMs=34 userId=1 sessionId=c29e2402-65be-4bb3-8d6c-ccdeaf68e7b2

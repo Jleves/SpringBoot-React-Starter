@@ -6,3 +6,6 @@
 [2026-08-21 14:26:08] [SECURITY] [4fac9641-7a14-4862-b254-d136662fc3a9] event=login_success userId=1 sessionId=e8e82fd3-d10b-4253-ab2f-9c5114d929a0
 [2026-08-21 14:36:32] [SECURITY] [bffd55a1-01b1-4846-b6df-0b4c7be84d96] event=login_success userId=1 sessionId=6e5448b5-5627-46ae-828a-010b671500fb
 [2026-08-21 14:38:59] [SECURITY] [f59a4525-f363-45ea-8803-a53ba6d6c77b] event=login_success userId=2 sessionId=82b6eae3-0276-47f9-a71e-e10ee6a3f382
+[2026-09-12 16:26:42] [SECURITY] [cd836900-d3e1-4547-9a27-fbb1542c2708] event=login_success userId=1 sessionId=ca470f81-dee9-486a-98a9-7ece22796404
+[2026-09-12 16:28:10] [SECURITY] [d2018f62-f494-4f4d-8e89-c262e739e4f0] event=login_success userId=1 sessionId=b8d93865-06b3-4d62-be11-c30a3ce5bbb0
+[2026-09-12 16:31:53] [SECURITY] [b147543f-8d2c-41b1-ad6c-9a94067ced01] event=login_success userId=1 sessionId=c29e2402-65be-4bb3-8d6c-ccdeaf68e7b2
