@@ -46,6 +46,18 @@ class PasswordResetAtomicityIntegrationTest {
     private AuthSessionService authSessionService;
 
     private Long userId;
+    @Autowired private com.ashenox.starter.auth.passwordchange.PasswordChangeService passwordChangeService;
+
+    @Test
+    void rollsBackAuthenticatedChangeWhenSessionRevocationFails() {
+        doThrow(new IllegalStateException("simulated revocation failure"))
+                .when(authSessionService).revokeAllForUser(anyLong());
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> passwordChangeService.change(userId,
+                new com.ashenox.starter.auth.passwordchange.ChangePasswordRequest("original-password", "changed-password")))
+                .isInstanceOf(IllegalStateException.class);
+        assertThat(passwordEncoder.matches("original-password", userRepository.findById(userId).orElseThrow().getPasswordHash())).isTrue();
+        assertThat(tokenRepository.findByTokenHash(DigestUtils.sha256Hex("atomic-token")).orElseThrow().getUsedAt()).isNull();
+    }
 
     @BeforeEach
     void setUp() {

@@ -7,7 +7,7 @@ import { fieldError } from '../components/fieldErrors.js'
 import { useAuth } from '../context/useAuth.js'
 
 export function LoginPage() {
-  const { login } = useAuth()
+  const { login, authNotice } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [form, setForm] = useState({ email: '', password: '' })
@@ -37,6 +37,7 @@ export function LoginPage() {
       description="Usá las credenciales configuradas para tu entorno."
       footer={<span>¿Olvidaste tu contraseña? <Link to="/forgot-password">Recuperarla</Link></span>}
     >
+      {(authNotice === 'password-changed' || location.state?.passwordChanged) && <p className="mt-5 text-emerald-800" role="status">Contraseña actualizada. Ingresá con tu contraseña nueva.</p>}
       <form className="mt-7 grid gap-5" onSubmit={handleSubmit}>
         <RequestError error={error} />
         <FormField id="email" label="Email" type="email" autoComplete="email" required value={form.email} error={fieldError(error, 'email')} onChange={(event) => setForm({ ...form, email: event.target.value })} />

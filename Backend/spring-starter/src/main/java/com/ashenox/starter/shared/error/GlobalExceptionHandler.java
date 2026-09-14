@@ -31,6 +31,18 @@ public class GlobalExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private final ApiErrorResponder responder;
 
+    @ExceptionHandler(com.ashenox.starter.auth.passwordchange.PasswordChangeException.class)
+    public ResponseEntity<ApiError> handlePasswordChange(
+            com.ashenox.starter.auth.passwordchange.PasswordChangeException exception, HttpServletRequest request) {
+        boolean limited = exception.getRetryAfter() > 0;
+        HttpStatus status = limited ? HttpStatus.TOO_MANY_REQUESTS : HttpStatus.BAD_REQUEST;
+        ApiErrorCode code = limited ? ApiErrorCode.AUTH_PASSWORD_CHANGE_RATE_LIMITED : ApiErrorCode.AUTH_PASSWORD_CHANGE_REJECTED;
+        var builder = ResponseEntity.status(status);
+        if (limited) builder.header("Retry-After", Long.toString(exception.getRetryAfter()));
+        return builder.body(responder.create(request, status.value(), code, exception.getMessage(),
+                List.of(new ApiFieldError(exception.getField(), code.name(), exception.getMessage()))));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException exception,
                                                       HttpServletRequest request) {

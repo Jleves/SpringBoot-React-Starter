@@ -46,6 +46,11 @@ public class User extends EntidadAuditable {
     @Builder.Default
     private boolean enabled = true;
 
+    @Column(nullable = false)
+    private int passwordChangeFailures;
+
+    private java.time.Instant passwordChangeWindowStart;
+
     @PrePersist
     @PreUpdate
     void normalizeEmail() {

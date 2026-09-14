@@ -4,14 +4,12 @@ import com.ashenox.starter.security.error.InvalidTokenException;
 import com.ashenox.starter.auth.passwordreset.event.PasswordResetRequested;
 import com.ashenox.starter.auth.passwordreset.model.PasswordResetToken;
 import com.ashenox.starter.auth.passwordreset.repository.PasswordResetTokenRepository;
-import com.ashenox.starter.auth.session.service.AuthSessionService;
 import com.ashenox.starter.auth.service.PasswordResetService;
 import com.ashenox.starter.shared.config.AppProperties;
 import com.ashenox.starter.user.repository.UserRepository;
 import com.ashenox.starter.user.support.EmailNormalizer;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,15 +25,15 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository tokenRepository;
     private final ApplicationEventPublisher eventPublisher;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthSessionService authSessionService;
     private final AppProperties appProperties;
+    private final com.ashenox.starter.auth.passwordchange.PasswordUpdateService passwordUpdateService;
+    private final jakarta.persistence.EntityManager entityManager;
     private final SecureRandom secureRandom = new SecureRandom();
 
     @Override
     @Transactional
     public void createPasswordResetToken(String email) {
-        userRepository.findByEmail(EmailNormalizer.normalize(email)).ifPresent(user -> {
+        userRepository.lockByEmail(EmailNormalizer.normalize(email)).ifPresent(user -> {
             String plainToken = generatePlainToken();
             PasswordResetToken resetToken = tokenRepository.findByUser(user)
                     .orElseGet(PasswordResetToken::new);
@@ -61,10 +59,13 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     @Transactional
     public void resetPassword(String token, String newPassword) {
         PasswordResetToken resetToken = findUsableToken(token);
-        resetToken.getUser().setPasswordHash(passwordEncoder.encode(newPassword));
-        resetToken.setUsedAt(Instant.now());
-        tokenRepository.save(resetToken);
-        authSessionService.revokeAllForUser(resetToken.getUser().getId());
+        var user = userRepository.lockById(resetToken.getUser().getId()).orElseThrow();
+        entityManager.refresh(resetToken, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
+        if (resetToken.getUsedAt() != null || !resetToken.getExpiresAt().isAfter(Instant.now())
+                || !resetToken.getTokenHash().equals(hashToken(token))) {
+            throw new InvalidTokenException("Token inválido o expirado");
+        }
+        passwordUpdateService.update(user, newPassword);
     }
 
     private PasswordResetToken findUsableToken(String plainToken) {

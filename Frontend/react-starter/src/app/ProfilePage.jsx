@@ -1,4 +1,5 @@
 import { useAuth } from '../auth/context/useAuth.js'
+import { ChangePasswordForm } from '../auth/components/ChangePasswordForm.jsx'
 
 export function ProfilePage() {
   const { user } = useAuth()
@@ -17,6 +18,7 @@ export function ProfilePage() {
           <div className="grid gap-1 py-3 sm:grid-cols-[9rem_1fr] sm:gap-4"><dt className="text-slate-500">Identificador</dt><dd className="m-0 font-semibold text-slate-900">{user?.id}</dd></div>
         </dl>
       </div>
+      <ChangePasswordForm />
     </section>
   )
 }

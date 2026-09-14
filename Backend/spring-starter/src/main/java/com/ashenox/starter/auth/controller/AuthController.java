@@ -46,6 +46,20 @@ public class AuthController {
     private final PasswordResetServiceImpl passwordResetService;
     private final AuthSessionService authSessionService;
     private final AuthCookieService cookieService;
+    private final com.ashenox.starter.auth.passwordchange.PasswordChangeService passwordChangeService;
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Void> changePassword(
+            @AuthenticationPrincipal AuthenticatedUser principal,
+            @Valid @RequestBody com.ashenox.starter.auth.passwordchange.ChangePasswordRequest request) {
+        passwordChangeService.change(principal.id(), request);
+        SECURITY_LOG.info("event=password_changed userId={}", principal.id());
+        return ResponseEntity.noContent()
+                .header(HttpHeaders.SET_COOKIE, cookieService.deleteAccessToken().toString())
+                .header(HttpHeaders.SET_COOKIE, cookieService.deleteRefreshToken().toString())
+                .header(HttpHeaders.SET_COOKIE, cookieService.deleteXsrfToken().toString())
+                .build();
+    }
 
     @GetMapping("/csrf")
     public ResponseEntity<Void> csrf(CsrfToken csrfToken) {

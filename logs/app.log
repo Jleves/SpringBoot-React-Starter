@@ -1,72 +1,269 @@
-[2026-08-22 10:49:06] [WARN ] [com.zaxxer.hikari.pool.HikariPool] [] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=18h34s518ms652µs600ns).
-[2026-09-12 16:09:25] [INFO ] [c.a.starter.SpringStarterApplication] [] Starting SpringStarterApplication using Java 21.0.7 with PID 6492 (C:\Users\jlinf\Desktop\Programacion\Trabajo\InitStarted\spring-starter\Backend\spring-starter\target\classes started by jlinf in C:\Users\jlinf\Desktop\Programacion\Trabajo\InitStarted\spring-starter)
-[2026-09-12 16:09:25] [INFO ] [c.a.starter.SpringStarterApplication] [] No active profile set, falling back to 1 default profile: "default"
-[2026-09-12 16:09:27] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Initializing ProtocolHandler ["http-nio-8080"]
-[2026-09-12 16:09:27] [INFO ] [o.a.catalina.core.StandardService] [] Starting service [Tomcat]
-[2026-09-12 16:09:27] [INFO ] [o.a.catalina.core.StandardEngine] [] Starting Servlet engine: [Apache Tomcat/11.0.22]
-[2026-09-12 16:09:28] [INFO ] [org.flywaydb.core.FlywayExecutor] [] Database: jdbc:mysql://127.0.0.1:3306/springStarter (MySQL 8.4)
-[2026-09-12 16:09:28] [INFO ] [o.f.core.internal.command.DbValidate] [] Successfully validated 1 migration (execution time 00:00.036s)
-[2026-09-12 16:09:28] [INFO ] [o.f.core.internal.command.DbMigrate] [] Current version of schema `springstarter`: 1
-[2026-09-12 16:09:28] [INFO ] [o.f.core.internal.command.DbMigrate] [] Schema `springstarter` is up to date. No migration necessary.
-[2026-09-12 16:09:28] [WARN ] [org.hibernate.orm.deprecation] [] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-[2026-09-12 16:09:30] [WARN ] [o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer] [] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
-[2026-09-12 16:09:31] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Starting ProtocolHandler ["http-nio-8080"]
-[2026-09-12 16:09:31] [INFO ] [c.a.starter.SpringStarterApplication] [] Started SpringStarterApplication in 6.366 seconds (process running for 6.81)
-[2026-09-12 16:09:31] [INFO ] [c.a.s.u.b.SuperAdminBootstrap] [] Bootstrap SUPER_ADMIN omitido: el usuario configurado ya existe
-[2026-09-12 16:24:28] [INFO ] [c.a.starter.SpringStarterApplication] [] Starting SpringStarterApplication using Java 21.0.7 with PID 24292 (C:\Users\jlinf\Desktop\Programacion\Trabajo\InitStarted\spring-starter\Backend\spring-starter\target\classes started by jlinf in C:\Users\jlinf\Desktop\Programacion\Trabajo\InitStarted\spring-starter)
-[2026-09-12 16:24:28] [INFO ] [c.a.starter.SpringStarterApplication] [] No active profile set, falling back to 1 default profile: "default"
-[2026-09-12 16:24:30] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Initializing ProtocolHandler ["http-nio-8080"]
-[2026-09-12 16:24:30] [INFO ] [o.a.catalina.core.StandardService] [] Starting service [Tomcat]
-[2026-09-12 16:24:30] [INFO ] [o.a.catalina.core.StandardEngine] [] Starting Servlet engine: [Apache Tomcat/11.0.22]
-[2026-09-12 16:24:31] [INFO ] [org.flywaydb.core.FlywayExecutor] [] Database: jdbc:mysql://127.0.0.1:3306/springStarter (MySQL 8.4)
-[2026-09-12 16:24:31] [INFO ] [o.f.core.internal.command.DbValidate] [] Successfully validated 1 migration (execution time 00:00.025s)
-[2026-09-12 16:24:31] [INFO ] [o.f.core.internal.command.DbMigrate] [] Current version of schema `springstarter`: 1
-[2026-09-12 16:24:31] [INFO ] [o.f.core.internal.command.DbMigrate] [] Schema `springstarter` is up to date. No migration necessary.
-[2026-09-12 16:24:31] [WARN ] [org.hibernate.orm.deprecation] [] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-[2026-09-12 16:24:33] [WARN ] [o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer] [] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
-[2026-09-12 16:24:34] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Starting ProtocolHandler ["http-nio-8080"]
-[2026-09-12 16:24:34] [INFO ] [c.a.starter.SpringStarterApplication] [] Started SpringStarterApplication in 5.999 seconds (process running for 6.341)
-[2026-09-12 16:24:34] [INFO ] [c.a.s.u.b.SuperAdminBootstrap] [] Bootstrap SUPER_ADMIN omitido: el usuario configurado ya existe
-[2026-09-12 16:26:27] [INFO ] [o.a.c.c.C.[Tomcat].[localhost].[/]] [] Initializing Spring DispatcherServlet 'dispatcherServlet'
-[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [76bec213-136a-4e68-9275-a75edbb3364e] request_started method=GET path=/api/auth/csrf
-[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [76bec213-136a-4e68-9275-a75edbb3364e] request_completed method=GET path=/api/auth/csrf status=204 durationMs=201 userId=anonymous sessionId=none
-[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [a1ec9acd-1876-4d94-ac78-dc042e243d53] request_started method=GET path=/api/auth/me
-[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [a1ec9acd-1876-4d94-ac78-dc042e243d53] request_completed method=GET path=/api/auth/me status=401 durationMs=68 userId=anonymous sessionId=none
-[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [f07385ec-0260-4cc7-b5bc-76110fd88a3d] request_started method=GET path=/api/auth/me
-[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [7910525e-d0b4-4250-bc4b-270e14be532c] request_started method=POST path=/api/auth/refresh
-[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [f07385ec-0260-4cc7-b5bc-76110fd88a3d] request_completed method=GET path=/api/auth/me status=401 durationMs=14 userId=anonymous sessionId=none
-[2026-09-12 16:26:27] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [7910525e-d0b4-4250-bc4b-270e14be532c] request_completed method=POST path=/api/auth/refresh status=401 durationMs=82 userId=anonymous sessionId=none
-[2026-09-12 16:26:41] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [cd836900-d3e1-4547-9a27-fbb1542c2708] request_started method=POST path=/api/auth/login
-[2026-09-12 16:26:42] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [cd836900-d3e1-4547-9a27-fbb1542c2708] request_completed method=POST path=/api/auth/login status=200 durationMs=1135 userId=anonymous sessionId=none
-[2026-09-12 16:26:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [be613221-f37c-4739-869d-31216181fabd] request_started method=POST path=/api/auth/logout
-[2026-09-12 16:26:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [be613221-f37c-4739-869d-31216181fabd] request_completed method=POST path=/api/auth/logout status=204 durationMs=167 userId=anonymous sessionId=none
-[2026-09-12 16:27:02] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [0be13c78-4be9-44d7-81a8-92bee5c94df3] request_started method=GET path=/api/auth/csrf
-[2026-09-12 16:27:02] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [0be13c78-4be9-44d7-81a8-92bee5c94df3] request_completed method=GET path=/api/auth/csrf status=204 durationMs=13 userId=anonymous sessionId=none
-[2026-09-12 16:27:02] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [019dcfcb-c065-4130-8fac-0eb3a5b90578] request_started method=POST path=/api/auth/forgot-password
-[2026-09-12 16:27:02] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [019dcfcb-c065-4130-8fac-0eb3a5b90578] request_completed method=POST path=/api/auth/forgot-password status=200 durationMs=117 userId=anonymous sessionId=none
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [81d7bb2b-62d6-44b8-b8c3-dae63728e279] request_started method=GET path=/api/auth/reset-password/validate
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [8574071e-3cf7-4e88-9159-5cca38f90ca0] request_started method=GET path=/api/auth/csrf
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [8574071e-3cf7-4e88-9159-5cca38f90ca0] request_completed method=GET path=/api/auth/csrf status=204 durationMs=17 userId=anonymous sessionId=none
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [ddccb34e-f1a7-44ce-bec2-b2b3d5ad0bc9] request_started method=GET path=/api/auth/me
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [ddccb34e-f1a7-44ce-bec2-b2b3d5ad0bc9] request_completed method=GET path=/api/auth/me status=401 durationMs=8 userId=anonymous sessionId=none
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [60049aec-dac1-4149-84c7-18fc058703d7] request_started method=POST path=/api/auth/refresh
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [de0eca96-fb00-4d0c-b6d1-3d9d85831d57] request_started method=GET path=/api/auth/me
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [81d7bb2b-62d6-44b8-b8c3-dae63728e279] request_completed method=GET path=/api/auth/reset-password/validate status=204 durationMs=45 userId=anonymous sessionId=none
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [de0eca96-fb00-4d0c-b6d1-3d9d85831d57] request_completed method=GET path=/api/auth/me status=401 durationMs=0 userId=anonymous sessionId=none
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [60049aec-dac1-4149-84c7-18fc058703d7] request_completed method=POST path=/api/auth/refresh status=401 durationMs=0 userId=anonymous sessionId=none
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [9253277e-7098-421f-9cba-01f9cca1cc13] request_started method=GET path=/api/auth/reset-password/validate
-[2026-09-12 16:27:28] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [9253277e-7098-421f-9cba-01f9cca1cc13] request_completed method=GET path=/api/auth/reset-password/validate status=204 durationMs=31 userId=anonymous sessionId=none
-[2026-09-12 16:27:52] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [7ff243a7-a623-4ed6-b978-2f634264f2c9] request_started method=POST path=/api/auth/reset-password
-[2026-09-12 16:27:52] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [7ff243a7-a623-4ed6-b978-2f634264f2c9] request_completed method=POST path=/api/auth/reset-password status=204 durationMs=260 userId=anonymous sessionId=none
-[2026-09-12 16:28:10] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [d2018f62-f494-4f4d-8e89-c262e739e4f0] request_started method=POST path=/api/auth/login
-[2026-09-12 16:28:10] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [d2018f62-f494-4f4d-8e89-c262e739e4f0] request_completed method=POST path=/api/auth/login status=200 durationMs=255 userId=anonymous sessionId=none
-[2026-09-12 16:28:12] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [2a8289dc-9026-48d9-bffa-4e44c6b128a6] request_started method=POST path=/api/auth/logout
-[2026-09-12 16:28:12] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [2a8289dc-9026-48d9-bffa-4e44c6b128a6] request_completed method=POST path=/api/auth/logout status=204 durationMs=29 userId=anonymous sessionId=none
-[2026-09-12 16:31:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [a63b70f7-2713-4863-8abf-28bfdc1af0e8] request_started method=GET path=/api/auth/csrf
-[2026-09-12 16:31:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [a63b70f7-2713-4863-8abf-28bfdc1af0e8] request_completed method=GET path=/api/auth/csrf status=204 durationMs=5 userId=anonymous sessionId=none
-[2026-09-12 16:31:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [b147543f-8d2c-41b1-ad6c-9a94067ced01] request_started method=POST path=/api/auth/login
-[2026-09-12 16:31:53] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [b147543f-8d2c-41b1-ad6c-9a94067ced01] request_completed method=POST path=/api/auth/login status=200 durationMs=284 userId=anonymous sessionId=none
-[2026-09-12 16:39:04] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [57c8d3dd-d6d5-40ba-875c-c7ea547a2b9b] request_started method=GET path=/api/auth/me
-[2026-09-12 16:39:04] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [57c8d3dd-d6d5-40ba-875c-c7ea547a2b9b] request_completed method=GET path=/api/auth/me status=200 durationMs=109 userId=1 sessionId=c29e2402-65be-4bb3-8d6c-ccdeaf68e7b2
-[2026-09-12 16:39:04] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [87adf653-7d5d-4e11-84e4-b7da4c3e1290] request_started method=GET path=/api/auth/me
-[2026-09-12 16:39:04] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [87adf653-7d5d-4e11-84e4-b7da4c3e1290] request_completed method=GET path=/api/auth/me status=200 durationMs=34 userId=1 sessionId=c29e2402-65be-4bb3-8d6c-ccdeaf68e7b2
+[2026-09-13 22:12:19] [INFO ] [c.a.starter.SpringStarterApplication] [] Starting SpringStarterApplication using Java 21.0.7 with PID 21972 (C:\Users\jlinf\Desktop\Programacion\Trabajo\InitStarted\spring-starter\Backend\spring-starter\target\classes started by jlinf in C:\Users\jlinf\Desktop\Programacion\Trabajo\InitStarted\spring-starter)
+[2026-09-13 22:12:19] [INFO ] [c.a.starter.SpringStarterApplication] [] No active profile set, falling back to 1 default profile: "default"
+[2026-09-13 22:12:21] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Initializing ProtocolHandler ["http-nio-8080"]
+[2026-09-13 22:12:21] [INFO ] [o.a.catalina.core.StandardService] [] Starting service [Tomcat]
+[2026-09-13 22:12:21] [INFO ] [o.a.catalina.core.StandardEngine] [] Starting Servlet engine: [Apache Tomcat/11.0.22]
+[2026-09-13 22:12:22] [INFO ] [org.flywaydb.core.FlywayExecutor] [] Database: jdbc:mysql://127.0.0.1:3306/springStarter (MySQL 8.4)
+[2026-09-13 22:12:22] [INFO ] [o.f.core.internal.command.DbValidate] [] Successfully validated 2 migrations (execution time 00:00.025s)
+[2026-09-13 22:12:22] [INFO ] [o.f.core.internal.command.DbMigrate] [] Current version of schema `springstarter`: 1
+[2026-09-13 22:12:22] [INFO ] [o.f.core.internal.command.DbMigrate] [] Migrating schema `springstarter` to version "2 - password change attempts"
+[2026-09-13 22:12:22] [INFO ] [o.f.core.internal.command.DbMigrate] [] Successfully applied 1 migration to schema `springstarter`, now at version v2 (execution time 00:00.060s)
+[2026-09-13 22:12:24] [WARN ] [org.hibernate.orm.deprecation] [] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+[2026-09-13 22:12:34] [WARN ] [o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer] [] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+[2026-09-13 22:12:38] [INFO ] [o.a.coyote.http11.Http11NioProtocol] [] Starting ProtocolHandler ["http-nio-8080"]
+[2026-09-13 22:12:38] [INFO ] [c.a.starter.SpringStarterApplication] [] Started SpringStarterApplication in 19.32 seconds (process running for 19.646)
+[2026-09-13 22:12:39] [INFO ] [c.a.s.u.b.SuperAdminBootstrap] [] Bootstrap SUPER_ADMIN omitido: el usuario configurado ya existe
+[2026-09-13 22:12:39] [INFO ] [o.a.c.c.C.[Tomcat].[localhost].[/]] [] Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2026-09-13 22:12:39] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [92bacb3a-bd27-400c-a658-c7b81c2c3051] request_started method=POST path=/api/auth/login
+[2026-09-13 22:12:40] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [92bacb3a-bd27-400c-a658-c7b81c2c3051] request_completed method=POST path=/api/auth/login status=401 durationMs=1117 userId=anonymous sessionId=none
+[2026-09-13 22:12:54] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [52bb995a-d11c-45be-98be-0c86322c8463] request_started method=POST path=/api/auth/login
+[2026-09-13 22:12:55] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [52bb995a-d11c-45be-98be-0c86322c8463] request_completed method=POST path=/api/auth/login status=401 durationMs=237 userId=anonymous sessionId=none
+[2026-09-13 22:13:00] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [fb0d8aea-6ef1-46b1-adb8-c135b90e33a9] request_started method=POST path=/api/auth/forgot-password
+[2026-09-13 22:13:00] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [fb0d8aea-6ef1-46b1-adb8-c135b90e33a9] request_completed method=POST path=/api/auth/forgot-password status=200 durationMs=157 userId=anonymous sessionId=none
+[2026-09-13 22:13:11] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [30d8fa9f-767f-4f5c-9f77-10ff85851988] request_started method=GET path=/api/auth/reset-password/validate
+[2026-09-13 22:13:11] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [41fbd53c-deef-4e4e-a86b-b5a2977ffe95] request_started method=GET path=/api/auth/me
+[2026-09-13 22:13:11] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [41fbd53c-deef-4e4e-a86b-b5a2977ffe95] request_completed method=GET path=/api/auth/me status=401 durationMs=23 userId=anonymous sessionId=none
+[2026-09-13 22:13:11] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [5d4dbdf4-e123-4b46-8355-78cb83c3e37f] request_started method=GET path=/api/auth/me
+[2026-09-13 22:13:11] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [bbea32ee-c8f0-437e-9968-a116e1f3d65b] request_started method=POST path=/api/auth/refresh
+[2026-09-13 22:13:11] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [5d4dbdf4-e123-4b46-8355-78cb83c3e37f] request_completed method=GET path=/api/auth/me status=401 durationMs=11 userId=anonymous sessionId=none
+[2026-09-13 22:13:11] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [bbea32ee-c8f0-437e-9968-a116e1f3d65b] request_completed method=POST path=/api/auth/refresh status=401 durationMs=23 userId=anonymous sessionId=none
+[2026-09-13 22:13:11] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [30d8fa9f-767f-4f5c-9f77-10ff85851988] request_completed method=GET path=/api/auth/reset-password/validate status=204 durationMs=65 userId=anonymous sessionId=none
+[2026-09-13 22:13:11] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [531aee80-c714-4de6-afd1-b934ceb21900] request_started method=GET path=/api/auth/reset-password/validate
+[2026-09-13 22:13:11] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [531aee80-c714-4de6-afd1-b934ceb21900] request_completed method=GET path=/api/auth/reset-password/validate status=204 durationMs=21 userId=anonymous sessionId=none
+[2026-09-13 22:13:22] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [0774c157-aa8f-4042-a7cf-0a936ab2d6e0] request_started method=POST path=/api/auth/reset-password
+[2026-09-13 22:13:22] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [0774c157-aa8f-4042-a7cf-0a936ab2d6e0] request_completed method=POST path=/api/auth/reset-password status=204 durationMs=338 userId=anonymous sessionId=none
+[2026-09-13 22:13:31] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [7a81a1f9-36eb-4683-9dad-1be10da7e1e9] request_started method=POST path=/api/auth/login
+[2026-09-13 22:13:31] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [7a81a1f9-36eb-4683-9dad-1be10da7e1e9] request_completed method=POST path=/api/auth/login status=200 durationMs=519 userId=anonymous sessionId=none
+[2026-09-13 22:14:32] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [f5a18c53-402f-4f0f-96a0-fb0281d51c35] request_started method=POST path=/api/auth/change-password
+[2026-09-13 22:14:32] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [f5a18c53-402f-4f0f-96a0-fb0281d51c35] request_completed method=POST path=/api/auth/change-password status=400 durationMs=494 userId=1 sessionId=8eabbec8-d452-45fd-9a1f-6d91da3e6718
+[2026-09-13 22:14:41] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [b7377ab9-8d7c-4ddc-ba4a-26e5846cc97d] request_started method=POST path=/api/auth/change-password
+[2026-09-13 22:14:42] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [b7377ab9-8d7c-4ddc-ba4a-26e5846cc97d] request_completed method=POST path=/api/auth/change-password status=204 durationMs=661 userId=1 sessionId=8eabbec8-d452-45fd-9a1f-6d91da3e6718
+[2026-09-13 22:14:49] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [f1750a6c-ba2d-457e-886e-bcabcb7e08d2] request_started method=GET path=/api/auth/csrf
+[2026-09-13 22:14:49] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [f1750a6c-ba2d-457e-886e-bcabcb7e08d2] request_completed method=GET path=/api/auth/csrf status=204 durationMs=10 userId=anonymous sessionId=none
+[2026-09-13 22:14:49] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [6cf4c57c-9bc4-484d-b00a-1dfe065320c0] request_started method=POST path=/api/auth/login
+[2026-09-13 22:14:49] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [6cf4c57c-9bc4-484d-b00a-1dfe065320c0] request_completed method=POST path=/api/auth/login status=200 durationMs=247 userId=anonymous sessionId=none
+[2026-09-13 22:43:29] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [efdb79e7-c623-4447-b915-83a77dcdcbc7] request_started method=GET path=/api/auth/me
+[2026-09-13 22:43:29] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [efdb79e7-c623-4447-b915-83a77dcdcbc7] request_completed method=GET path=/api/auth/me status=401 durationMs=2 userId=anonymous sessionId=none
+[2026-09-13 22:43:29] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [8abbd098-3f53-4b77-9538-dae407c53c46] request_started method=GET path=/api/auth/me
+[2026-09-13 22:43:29] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [8abbd098-3f53-4b77-9538-dae407c53c46] request_completed method=GET path=/api/auth/me status=401 durationMs=2 userId=anonymous sessionId=none
+[2026-09-13 22:43:29] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [b9a3745a-6dc4-4ee6-a22c-a3a42a4ad2c4] request_started method=POST path=/api/auth/refresh
+[2026-09-13 22:43:29] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [07942a34-79da-4fff-99c2-8b95443bbda8] request_started method=POST path=/api/auth/refresh
+[2026-09-13 22:43:29] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [07942a34-79da-4fff-99c2-8b95443bbda8] request_completed method=POST path=/api/auth/refresh status=204 durationMs=31 userId=anonymous sessionId=none
+[2026-09-13 22:43:29] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [3c75d596-0ba5-4010-863f-08e5f8b3f02a] request_started method=GET path=/api/auth/me
+[2026-09-13 22:43:29] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [3c75d596-0ba5-4010-863f-08e5f8b3f02a] request_completed method=GET path=/api/auth/me status=200 durationMs=20 userId=1 sessionId=bf516bcb-97a4-43d7-9bb8-1389c92a9571
+[2026-09-13 22:44:20] [WARN ] [org.hibernate.orm.jdbc.error] [b9a3745a-6dc4-4ee6-a22c-a3a42a4ad2c4] HHH000247: ErrorCode: 1205, SQLState: 40001
+[2026-09-13 22:44:20] [WARN ] [org.hibernate.orm.jdbc.error] [b9a3745a-6dc4-4ee6-a22c-a3a42a4ad2c4] Lock wait timeout exceeded; try restarting transaction
+[2026-09-13 22:44:20] [ERROR] [c.a.s.s.error.GlobalExceptionHandler] [b9a3745a-6dc4-4ee6-a22c-a3a42a4ad2c4] Unhandled request error path=/api/auth/refresh code=INTERNAL_ERROR
+org.springframework.dao.CannotAcquireLockException: JDBC exception executing SQL [Lock wait timeout exceeded; try restarting transaction] [update auth_sessions as1_0 set revoked_at=?,version=(as1_0.version+1) where as1_0.id=? and as1_0.revoked_at is null]; SQL [update auth_sessions as1_0 set revoked_at=?,version=(as1_0.version+1) where as1_0.id=? and as1_0.revoked_at is null]
+	at org.springframework.orm.jpa.hibernate.HibernateExceptionTranslator.convertHibernateAccessException(HibernateExceptionTranslator.java:162)
+	at org.springframework.orm.jpa.hibernate.HibernateExceptionTranslator.convertHibernateAccessException(HibernateExceptionTranslator.java:131)
+	at org.springframework.orm.jpa.hibernate.HibernateExceptionTranslator.translateExceptionIfPossible(HibernateExceptionTranslator.java:109)
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:223)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.translateExceptionIfPossible(AbstractEntityManagerFactoryBean.java:577)
+	at org.springframework.dao.support.ChainedPersistenceExceptionTranslator.translateExceptionIfPossible(ChainedPersistenceExceptionTranslator.java:61)
+	at org.springframework.dao.support.DataAccessUtils.translateIfNecessary(DataAccessUtils.java:346)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:157)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:137)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:222)
+	at jdk.proxy2/jdk.proxy2.$Proxy178.revokeById(Unknown Source)
+	at com.ashenox.starter.auth.session.service.SessionRevocationService.revokeInNewTransaction(SessionRevocationService.java:19)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:158)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:133)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:371)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:130)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:719)
+	at com.ashenox.starter.auth.session.service.SessionRevocationService$$SpringCGLIB$$0.revokeInNewTransaction(<generated>)
+	at com.ashenox.starter.auth.session.service.AuthSessionService.rotate(AuthSessionService.java:77)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:158)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:133)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:371)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:130)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:719)
+	at com.ashenox.starter.auth.session.service.AuthSessionService$$SpringCGLIB$$0.rotate(<generated>)
+	at com.ashenox.starter.auth.controller.AuthController.refresh(AuthController.java:85)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:252)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:184)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:653)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:723)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$2(FilterChainProxy.java:235)
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:491)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:353)
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:84)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:131)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:132)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:86)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.csrf.CsrfFilter.doFilterInternal(CsrfFilter.java:135)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:336)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at com.ashenox.starter.log.filter.RequestLoggingFilter.doFilterInternal(RequestLoggingFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1272)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.hibernate.exception.LockTimeoutException: JDBC exception executing SQL [Lock wait timeout exceeded; try restarting transaction] [update auth_sessions as1_0 set revoked_at=?,version=(as1_0.version+1) where as1_0.id=? and as1_0.revoked_at is null]
+	at org.hibernate.dialect.MySQLDialect.lambda$buildSQLExceptionConversionDelegate$0(MySQLDialect.java:1276)
+	at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:34)
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:115)
+	at org.hibernate.sql.exec.internal.StandardJdbcMutationExecutor.handleException(StandardJdbcMutationExecutor.java:95)
+	at org.hibernate.sql.exec.internal.StandardJdbcMutationExecutor.execute(StandardJdbcMutationExecutor.java:84)
+	at org.hibernate.query.sqm.internal.SimpleNonSelectQueryPlan.execute(SimpleNonSelectQueryPlan.java:61)
+	at org.hibernate.query.sqm.internal.SimpleNonSelectQueryPlan.executeUpdate(SimpleNonSelectQueryPlan.java:56)
+	at org.hibernate.query.sqm.internal.SqmQueryImpl.doExecuteUpdate(SqmQueryImpl.java:514)
+	at org.hibernate.query.sqm.internal.SqmQueryImpl.executeUpdate(SqmQueryImpl.java:486)
+	at org.springframework.data.jpa.repository.query.JpaQueryExecution$ModifyingExecution.doExecute(JpaQueryExecution.java:382)
+	at org.springframework.data.jpa.repository.query.JpaQueryExecution.execute(JpaQueryExecution.java:100)
+	at org.springframework.data.jpa.repository.query.AbstractJpaQuery.doExecute(AbstractJpaQuery.java:166)
+	at org.springframework.data.jpa.repository.query.AbstractJpaQuery.execute(AbstractJpaQuery.java:156)
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.doInvoke(RepositoryMethodInvoker.java:169)
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.invoke(RepositoryMethodInvoker.java:158)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.doInvoke(QueryExecutorMethodInterceptor.java:167)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.invoke(QueryExecutorMethodInterceptor.java:146)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+	at org.springframework.data.projection.DefaultMethodInvokingMethodInterceptor.invoke(DefaultMethodInvokingMethodInterceptor.java:69)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:133)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:371)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:130)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:135)
+	... 164 common frames omitted
+Caused by: com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException: Lock wait timeout exceeded; try restarting transaction
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:115)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.executeUpdate(ProxyPreparedStatement.java:61)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeUpdate(HikariProxyPreparedStatement.java)
+	at org.hibernate.sql.exec.internal.StandardJdbcMutationExecutor.execute(StandardJdbcMutationExecutor.java:70)
+	... 184 common frames omitted
+[2026-09-13 22:44:20] [INFO ] [c.a.s.l.filter.RequestLoggingFilter] [b9a3745a-6dc4-4ee6-a22c-a3a42a4ad2c4] request_completed method=POST path=/api/auth/refresh status=500 durationMs=50843 userId=anonymous sessionId=none

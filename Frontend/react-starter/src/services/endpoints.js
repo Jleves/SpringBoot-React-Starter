@@ -3,6 +3,7 @@ const authBase = '/api/auth'
 export const ENDPOINTS = Object.freeze({
   ADMIN: Object.freeze({ USERS: '/api/admin/users' }),
   AUTH: Object.freeze({
+    CHANGE_PASSWORD: `${authBase}/change-password`,
     CSRF: `${authBase}/csrf`,
     LOGIN: `${authBase}/login`,
     REFRESH: `${authBase}/refresh`,

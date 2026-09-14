@@ -232,7 +232,57 @@ Completar el flujo de alta administrativa desde el frontend, adaptando el backen
 
 Incluye la pantalla, navegación y protección exclusiva para `SUPER_ADMIN`, integración con el endpoint existente y pruebas del flujo de alta. El cambio de autorización backend y sus pruebas se realizan antes en un commit separado y explícito.
 
-### Etapa 7 — OpenAPI, observabilidad y operación local
+### Etapa 7 — Cambio de contraseña desde el perfil
+
+Permitir que cualquier usuario autenticado (`USER`, `ADMIN` o `SUPER_ADMIN`) cambie su propia contraseña desde el perfil, sin solicitar un enlace por correo.
+
+**Estado de cierre (13/09/2026):** implementada y verificada, sin crear commit por indicación del usuario. Pasaron 28 pruebas backend de cambio/recuperación (incluidas 11 contra MySQL 8.4), 30 pruebas frontend, lint, build de React y empaquetado del backend. También se comprobó en Edge con backend y MySQL aislados: dos sesiones, cambio desde el perfil, confirmación en login, rechazo de contraseña anterior, acceso con la nueva, rechazo del refresh de la segunda sesión y vigencia residual del access anterior. El proxy temporal de la prueba presentó el origen permitido por el backend; no se modificó CORS productivo.
+
+**Implementación y reutilización:**
+
+- Existe `POST /api/auth/reset-password`, público y protegido por CSRF, que recibe `token` y `newPassword`. `PasswordResetServiceImpl` valida el token de recuperación, actualiza el hash, consume el token y revoca las sesiones dentro de una transacción. Su contrato requiere demostrar acceso al enlace de recuperación.
+- `POST /api/auth/change-password` y el formulario de perfil están implementados. `PasswordChangeService` verifica la contraseña actual y limita los intentos; `PasswordUpdateService` comparte actualización e invalidación con la recuperación por correo.
+- Flyway `V2__password_change_attempts.sql` agrega a `users` el contador de fallos y el inicio de ventana. Se admiten cinco verificaciones fallidas por cuenta en 15 minutos; los intentos siguientes reciben `429` con `Retry-After` hasta finalizar la ventana. El contador se persiste en MySQL y no se reinicia cambiando de instancia.
+- Login, cambio de contraseña y reset coordinan el acceso mediante bloqueo del usuario. Reset vuelve a comprobar el token bajo bloqueo; la revocación global incrementa las versiones de sesiones para impedir que un refresh concurrente restaure una sesión revocada.
+- La política compartida exige al menos ocho caracteres y un máximo de 72 bytes UTF-8, acorde con BCrypt. No se recortan contraseñas. La confirmación de éxito se conserva en el contexto React durante la redirección al login; un resultado incierto de red no provoca reenvío automático.
+- Mantener el contrato público de reset. No volver opcional el token, generar uno artificial para el perfil ni permitir elegir entre cookie y token dentro del mismo endpoint.
+- Reutilizar `PasswordEncoder`, persistencia de usuario, `AuthSessionService.revokeAllForUser`, eliminación de cookies y el cliente HTTP React. Extraer una operación interna compartida para actualizar la contraseña e invalidar credenciales cuando corresponda, manteniendo separadas las verificaciones de identidad: token de recuperación para reset y contraseña actual para cambio autenticado. La extracción debe conservar la atomicidad de ambos flujos y sus pruebas existentes.
+
+**Contrato implementado:**
+
+- Agregar `POST /api/auth/change-password`, con autenticación y CSRF obligatorios, para todos los roles. Recibir únicamente `currentPassword` y `newPassword`; determinar el usuario desde el principal autenticado, nunca desde un email o identificador enviado por el cliente. Este endpoint no permite cambiar contraseñas de terceros, tampoco a `SUPER_ADMIN`.
+- Verificar la contraseña actual con `PasswordEncoder.matches` contra el hash vigente en base de datos y comprobar que la cuenta siga habilitada. Una cookie válida por sí sola no autoriza el cambio.
+- Validar la contraseña nueva en el backend, compartir la política con alta y reset y rechazar una contraseña igual a la actual. Revisar los límites reales del encoder antes de fijar validaciones uniformes; no recortar ni transformar contraseñas silenciosamente. La confirmación de contraseña se valida en React para evitar errores de escritura.
+- Ante contraseña actual incorrecta, responder `400` con un código específico de `ApiError` y error de campo, sin modificar contraseña, tokens o sesiones. Reservar `401` para falta de autenticación válida y `403` para CSRF o autorización; evitar que un error de contraseña dispare el refresh automático del cliente.
+- En una única transacción, guardar el hash nuevo, invalidar los tokens de recuperación pendientes y revocar todas las sesiones de refresh del usuario, incluida la actual. Ante un fallo, revertir todas esas operaciones. Coordinar cambios/reset concurrentes y carreras con login/refresh para impedir que credenciales anteriores creen o reactiven sesiones después del cambio.
+- Tras confirmar la transacción, responder `204 No Content` y eliminar `ACCESS_TOKEN`, `REFRESH_TOKEN` y `XSRF-TOKEN` mediante `AuthCookieService`. No emitir una sesión nueva automáticamente. React limpia su estado autenticado y dirige al login con una confirmación para ingresar con la contraseña nueva.
+- El cambio no requiere envío de email ni depende de SMTP. Una notificación informativa posterior, sin contraseña ni enlaces de autorización, puede evaluarse como mejora independiente.
+
+**Riesgos y controles:**
+
+- Sesión robada o equipo desbloqueado: quien pueda usar una sesión no debe poder tomar control permanente de la cuenta solo con esa sesión. Exigir la contraseña actual reduce ese riesgo; limitar los intentos de verificación por cuenta con espera temporal y respuesta `429`, sin bloquear permanentemente la cuenta. Se permiten cinco verificaciones fallidas por cuenta en una ventana de 15 minutos, con contador persistido en MySQL compartido entre instancias. La reautenticación para cambios sensibles sigue la guía de [OWASP Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#change-password-feature).
+- CSRF y XSS: conservar HTTPS, cookies `Secure`/`HttpOnly`/`SameSite` y validación de `X-XSRF-TOKEN`. `HttpOnly` impide leer la cookie desde JavaScript, pero un script malicioso dentro del sitio puede enviar peticiones autenticadas e incluso capturar lo escrito en el formulario. Las cookies y la contraseña actual no sustituyen la prevención de XSS. Ver [OWASP Session Management](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#httponly-attribute) y [OWASP CSRF Prevention](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html).
+- Access JWT anteriores: actualmente `JwtRequestFilter` valida el JWT y carga el usuario, pero no consulta la revocación de la sesión ni una versión de credenciales. Revocar refresh y borrar cookies locales no invalida un access token copiado: puede seguir autorizando peticiones hasta su vencimiento (15 minutos por defecto, según configuración). Esta etapa conserva ese límite del diseño y debe documentarlo sin prometer un cierre inmediato en todos los dispositivos. Si se requiere invalidación inmediata, ampliar primero el contrato con una versión de credenciales o validación de sesión en cada petición, aplicada también al reset y a las carreras con login/refresh.
+- Enlaces de recuperación anteriores: invalidarlos en el cambio evita que un enlace pendiente pueda utilizarse posteriormente para reemplazar la contraseña nueva.
+- Fuga de secretos y respuestas perdidas: no guardar contraseñas en storage, URLs, logs ni mensajes de error. Deshabilitar envíos simultáneos. Si se pierde la respuesta de red, no afirmar que el cambio falló ni repetirlo automáticamente: informar que el resultado no pudo confirmarse y permitir volver al login o a recuperación.
+
+**Frontend y pruebas:**
+
+- Agregar en el perfil la sección **Cambiar contraseña**, con contraseña actual, nueva y confirmación, usando `autocomplete="current-password"` y `autocomplete="new-password"`, validaciones, errores por campo y estado de envío. Avisar antes de confirmar que deberá volver a ingresar y que las demás sesiones dejarán de poder renovarse.
+- Reutilizar el cliente HTTP con cookies y CSRF; permitir únicamente sus reintentos controlados ante rechazo de autenticación/CSRF previo al cambio, sin reintentos automáticos ante errores de red. Limpiar los campos al completar o abandonar el formulario. Actualizar el contexto autenticado solo después de una respuesta exitosa; no depender de un segundo logout para confirmar una operación ya realizada.
+- Probar el backend para todos los roles sobre su propia cuenta, imposibilidad de afectar otra cuenta, contraseña actual incorrecta, validación de nueva contraseña, autenticación/CSRF, límite de intentos, rollback, concurrencia, invalidación de reset tokens, revocación de refresh, eliminación de cookies y el límite documentado de los access JWT anteriores. Verificar que el login rechaza la contraseña anterior y acepta la nueva.
+- Probar en React confirmación, validaciones, errores por campo, sesión vencida, espera por límite de intentos, errores de red sin falso éxito, prevención de doble envío y regreso al login tras éxito. Ejecutar las pruebas de recuperación existentes para comprobar que la reutilización no altera su contrato.
+- Validar el flujo completo desde el perfil contra el backend y MySQL, incluyendo una segunda sesión, y ejecutar las pruebas afectadas, lint y build.
+
+**Criterio de salida:** cualquier usuario autenticado puede cambiar exclusivamente su contraseña presentando la actual, sin email; la contraseña anterior, los refresh y los enlaces de recuperación previos dejan de ser utilizables tras el cambio, se solicita un nuevo login y queda explícita la vigencia residual de los access JWT. Pruebas relevantes, lint, build y flujo integrado aprobados.
+
+**Commit de cierre propuesto:** `feat(auth): add authenticated password change from profile`
+
+Incluye endpoint autenticado, reutilización transaccional de lógica de contraseña, controles de intentos, formulario de perfil, manejo de sesión, documentación y pruebas; no incluye administración de contraseñas ajenas.
+
+El contrato para una futura verificación en dos pasos por correo, incluyendo diagramas y activación/desactivación, está en [PLAN_DOBLE_FACTOR_EMAIL.md](PLAN_DOBLE_FACTOR_EMAIL.md). Esa funcionalidad no forma parte de la implementación de esta etapa.
+
+### Etapa 8 — OpenAPI, observabilidad y operación local
 
 - Incorporar OpenAPI/Swagger compatible con Spring Boot 4.
 - Documentar cookies, CSRF, respuestas y códigos de error.
@@ -248,7 +298,7 @@ Incluye la pantalla, navegación y protección exclusiva para `SUPER_ADMIN`, int
 
 Incluye OpenAPI, Actuator, logs operativos, Docker Compose, `.env.example` y documentación de ejecución y despliegue local.
 
-### Etapa 8 — Verificación y automatización
+### Etapa 9 — Verificación y automatización
 
 Backend:
 
@@ -260,6 +310,7 @@ Backend:
 - Refresh expirado, rotado, reutilizado y concurrente.
 - Sesiones independientes y logout selectivo.
 - Reset de contraseña y revocación global.
+- Cambio autenticado de contraseña, reautenticación, límite de intentos e invalidación de credenciales anteriores según el contrato de la etapa 7.
 - Matriz de roles y contrato uniforme de errores.
 
 Frontend:

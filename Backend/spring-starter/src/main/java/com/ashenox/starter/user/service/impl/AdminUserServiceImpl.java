@@ -28,6 +28,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         }
 
         String email = EmailNormalizer.normalize(request.email());
+        com.ashenox.starter.auth.passwordchange.PasswordUpdateService.validate(request.password());
         User user = User.builder()
                 .email(email)
                 .passwordHash(passwordEncoder.encode(request.password()))

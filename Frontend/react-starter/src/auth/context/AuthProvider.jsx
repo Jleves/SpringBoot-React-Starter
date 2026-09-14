@@ -7,6 +7,7 @@ import { AuthContext } from './AuthContext.js'
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [status, setStatus] = useState('loading')
+  const [authNotice, setAuthNotice] = useState(null)
 
   useEffect(() => subscribeToSessionExpired(() => {
     setUser(null)
@@ -40,6 +41,7 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (credentials) => {
     const authenticatedUser = await authService.login(credentials)
+    setAuthNotice(null)
     setUser(authenticatedUser)
     setStatus('authenticated')
     return authenticatedUser
@@ -51,13 +53,22 @@ export function AuthProvider({ children }) {
     setStatus('anonymous')
   }, [])
 
+  const changePassword = useCallback(async (passwords) => {
+    await authService.changePassword(passwords)
+    setAuthNotice('password-changed')
+    setUser(null)
+    setStatus('anonymous')
+  }, [])
+
   const value = useMemo(() => ({
     user,
     status,
+    authNotice,
     isAuthenticated: status === 'authenticated',
     login,
     logout,
-  }), [user, status, login, logout])
+    changePassword,
+  }), [user, status, authNotice, login, logout, changePassword])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

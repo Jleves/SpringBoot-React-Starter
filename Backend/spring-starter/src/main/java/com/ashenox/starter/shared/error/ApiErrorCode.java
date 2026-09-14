@@ -2,6 +2,8 @@ package com.ashenox.starter.shared.error;
 
 public enum ApiErrorCode {
     VALIDATION_ERROR,
+    AUTH_PASSWORD_CHANGE_REJECTED,
+    AUTH_PASSWORD_CHANGE_RATE_LIMITED,
     MALFORMED_REQUEST,
     AUTH_INVALID_CREDENTIALS,
     AUTH_TOKEN_EXPIRED,

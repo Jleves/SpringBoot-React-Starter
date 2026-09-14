@@ -62,3 +62,21 @@ npm.cmd test
 npm.cmd run lint
 npm.cmd run build
 ```
+
+## Cambio de contraseña desde el perfil
+
+Todos los roles pueden cambiar su propia contraseña en **Perfil → Cambiar contraseña**, indicando contraseña actual, nueva y confirmación. No se envía correo. La política es de al menos 8 caracteres y un máximo de 72 bytes UTF-8 para la contraseña nueva, sin recorte silencioso.
+
+Tras confirmar el cambio, se solicita un nuevo login, se revocan los refresh de todas las sesiones y se invalidan los enlaces de recuperación pendientes. Los access JWT ya emitidos conservan su vigencia hasta vencer (15 minutos por defecto); no se promete invalidación inmediata en otros dispositivos.
+
+El endpoint `POST /api/auth/change-password` exige autenticación y CSRF y recibe `currentPassword` y `newPassword`. Una contraseña actual incorrecta produce `400` con error de campo. Después de cinco verificaciones fallidas por cuenta dentro de una ventana de 15 minutos, devuelve `429` y `Retry-After`. Los contadores se comparten mediante MySQL. Flyway aplica automáticamente la migración V2 al arrancar; no se requiere modificar tablas manualmente.
+
+Verificación del backend, con Docker activo para ejecutar también MySQL:
+
+```powershell
+.\mvnw.cmd '-Dtest=PasswordChangeIntegrationTest,PasswordChangeMySqlIntegrationTest,PasswordResetAtomicityIntegrationTest,PasswordRecoveryIntegrationTest' test
+```
+
+Para comprobarlo manualmente, abrir dos sesiones del mismo usuario en navegadores o perfiles independientes, cambiar la contraseña en uno y volver a ingresar con la nueva. La contraseña anterior debe fallar y el refresh de la otra sesión debe ser rechazado. Si se pierde la respuesta del cambio, la interfaz informa que el resultado no pudo confirmarse y permite volver al login o recuperar acceso, sin reenviar automáticamente.
+
+El diseño de verificación en dos pasos por correo está en [PLAN_DOBLE_FACTOR_EMAIL.md](PLAN_DOBLE_FACTOR_EMAIL.md); todavía no está implementado.

@@ -25,9 +25,12 @@ public class AuthService {
     private final UserService userService;
     private final AuthSessionService authSessionService;
     private final AuthenticationManager authenticationManager;
+    private final com.ashenox.starter.user.repository.UserRepository userRepository;
 
+    @org.springframework.transaction.annotation.Transactional
     public IssuedAuthentication login(LoginRequest loginRequest) {
         try {
+            userRepository.lockByEmail(com.ashenox.starter.user.support.EmailNormalizer.normalize(loginRequest.getEmail()));
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
             );

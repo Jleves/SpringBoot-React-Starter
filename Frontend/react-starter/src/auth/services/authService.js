@@ -25,6 +25,12 @@ export async function logout() {
   })
 }
 
+export function changePassword({ currentPassword, newPassword }) {
+  return apiRequest(ENDPOINTS.AUTH.CHANGE_PASSWORD, {
+    method: 'POST', body: { currentPassword, newPassword },
+  })
+}
+
 export async function getCurrentUser() {
   const user = await apiRequest(ENDPOINTS.AUTH.ME)
   return normalizeUser(user)
